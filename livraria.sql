@@ -1,0 +1,16 @@
+DROP IF EXISTS ProdutosComprados;
+DROP IF EXISTS Compra;
+DROP IF EXISTS Cliente;
+DROP IF EXISTS Funcionario;
+DROP IF EXISTS Genero;
+DROP IF EXISTS AutorMidia;
+DROP IF EXISTS Autor;
+DROP IF EXISTS Revista;
+DROP IF EXISTS Volume;
+DROP IF EXISTS Manga;
+DROP IF EXISTS Livro;
+DROP IF EXISTS Midia;
+
+CREATE TABLE Cliente (
+
+)
