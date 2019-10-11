@@ -1,0 +1,17 @@
+1 - Cliente pode ser cadastrado sem precisar comprar
+2 - Cliente pode fazer ou não quantas compras quiser
+3 - Funcionário pode ser cadastrado sem precisar participar de compra
+4 - Funcionário pode participar ou não de quantas compras quiser
+5 - Uma compra deve ter 1 cliente e 1 funcionário participando
+6 - Uma compra deve possuir ao menos 1 mídia
+7 - A quantidade mínima de mídias na compra é 1
+8 - O preço de uma mídia é mutável
+9 - Uma mídia é um livro ou revista ou volume
+10 - Uma mídia deve pertencer a somente 1 gênero
+11 - Um gênero pode ser cadastro sem possuir mídia
+12 - Ao cadastrar um livro, revista ou volume deve-se associar a uma somente mídia
+13 - Um mangá é cadastrado sem precisar possuir volume
+14 - Um volume ao ser cadastrado deve se vincular a somente um mangá
+15 - Uma mídia deve possuir 1 ou mais autores
+16 - Um autor pode ser cadastrado sem ter feito mídia
+17 - Um autor pode se vincular a nenhuma ou quantas quiser
