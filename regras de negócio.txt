@@ -1,7 +1,7 @@
 1 - Cliente pode ser cadastrado sem precisar comprar
-2 - Cliente pode fazer ou não quantas compras quiser
+2 - Cliente pode fazer quantas comprar quiser
 3 - Funcionário pode ser cadastrado sem precisar participar de compra
-4 - Funcionário pode participar ou não de quantas compras quiser
+4 - Funcionário pode participar quantas compras quiser
 5 - Uma compra deve ter 1 cliente e 1 funcionário participando
 6 - Uma compra deve possuir ao menos 1 mídia
 7 - A quantidade mínima de mídias na compra é 1
