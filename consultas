@@ -1,0 +1,49 @@
+
+	#Seleciona vip's
+
+SELECT clienteid, nome FROM cliente
+WHERE vip = TRUE;
+
+	#Histórico de gasto do cliente
+
+SELECT c.clienteId, c.nome, co.data, co.precoTotal, co.desconto, co.precoFinal
+FROM Cliente c, Compra co
+WHERE c.clienteId = co.fkClienteId
+GROUP BY c.clienteId;
+
+	#Histórico de compra do cliente
+
+SELECT c.clienteId, c.nome, pc.quantidade, m.nome, m.tipo
+FROM Cliente c, Compra co, ProdutosComprados pc, Midia m
+LEFT JOIN ON c.clienteId = co.fkClienteId
+LEFT JOIN ON co.compraId = pc.fkCompraId
+LEFT JOIN ON pc.fkMidiaId = m.midiaId
+GROUP BY c.clienteId;
+
+	#Midias Disponiveis na livraria por tipo
+
+SELECT m.midiaId, m.nome, m.dataPublicacao, m.tipo, m.idioma, m.localPublicacao, m.editora, m.precoMidia
+FROM Midia m
+GROUP BY m.tipo;
+
+	#Midias disponiveis na livraria por genero
+
+SELECT m.midiaId, m.nome, m.dataPublicacao, m.tipo, m.idioma, m.localPublicacao, m.editora, m.precoMidia, g.nome
+FROM Midia m, Genero g
+WHERE g.generoId = m.fkGeneroId
+GROUP BY g.nome;
+
+	#Autores e suas obras disponiveis na livraria
+
+SELECT a.autorId, a.nome, a.nacionalidade, a.dataNascimento, a.dataFalecimento, m.tipo, m.nome, m.dataPublicacao, m.preco
+FROM Autor a, AutorMidia am, Midia m
+WHERE a.autorId = am.fkAutorId
+AND am.fkMidiaId = m.midiaId
+GROUP BY a.nome;
+
+	#Funcionarios e suas vendas
+  
+SELECT f.funcionarioId, f.nome, f.funcao, co.fkClienteId, co.compraId, co.data, co.compraId
+FROM Funcionario f, Compra co
+WHERE f.funcionarioId = co.fkFuncionarioId
+GROUP BY f.funcionarioId;
