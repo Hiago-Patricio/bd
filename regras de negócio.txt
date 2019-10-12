@@ -18,6 +18,6 @@ Regras de negócio da livraria:
 17 - Um autor pode se vincular a nenhuma ou quantas quiser
 18 - Depois de 100 compras o cliente vira vip
 19 - Cliente vip tem 10% de desconto no valor inicial da compra
-20 - Cliente recebe 10% de desconto no valor inicial da compra a partir de 5 unidades
+20 - Cliente recebe 10% de desconto no valor da mídia a partir de 5 unidades dela
 21 - A cada 10 compras o cliente ganha 25% de desconto
 22 - Se o mangá estiver finalizado o cliente recebe 20% de desconto na compra de todos os volumes do mangá
