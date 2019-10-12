@@ -9,7 +9,7 @@
 9 - Uma mídia é um livro ou revista ou volume
 10 - Uma mídia deve pertencer a somente 1 gênero
 11 - Um gênero pode ser cadastro sem possuir mídia
-12 - Ao cadastrar um livro, revista ou volume deve-se associar a uma somente mídia
+12 - Ao cadastrar um livro, revista ou volume deve-se associar a somente uma mídia
 13 - Um mangá é cadastrado sem precisar possuir volume
 14 - Um volume ao ser cadastrado deve se vincular a somente um mangá
 15 - Uma mídia deve possuir 1 ou mais autores
