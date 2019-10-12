@@ -41,7 +41,8 @@ CREATE TABLE Livro (
 CREATE TABLE Manga (
     mangaId SERIAL PRIMARY KEY,
     nome VARCHAR NOT NULL,
-    adaptacaoAnime BOOLEAN NOT NULL
+    adaptacaoAnime BOOLEAN NOT NULL,
+    finalizado BOOLEAN NOT NULL
 );
 
 CREATE TABLE Volume (
@@ -84,11 +85,12 @@ CREATE TABLE Funcionario (
 
 CREATE TABLE Cliente (
     clienteId SERIAL PRIMARY KEY,
+    quantidadeCompras INTEGER NOT NULL,
     endereco VARCHAR NOT NULL,
     sexo VARCHAR NOT NULL,
     nome VARCHAR NOT NULL,
     dataNascimento DATE NOT NULL,
-    vip BOOLEAN NOT NULL 
+    vip BOOLEAN NOT NULL
 );
 
 CREATE TABLE Compra (

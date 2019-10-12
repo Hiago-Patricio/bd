@@ -193,7 +193,8 @@ table_name = 'Manga'
 table_name_list.append(table_name)
 field_dict_list[table_name] = [
     'nome-NAME',
-    'adaptacaoAnime-BOOLEAN'
+    'adaptacaoAnime-BOOLEAN',
+    'finalizado-BOOLEAN'
 ]
 
 table_name = 'Volume'
@@ -243,6 +244,7 @@ table_name = 'Cliente'
 table_name_list.append(table_name)
 field_dict_list[table_name] = [
     'endereco-ADDRESS',
+    'quantidadeCompras-INTEGER',
     'sexo-SEX',
     'nome-NAME',
     'dataNascimento-DATE',
@@ -287,7 +289,7 @@ host:str = '127.0.0.1'
 port:str = '5432'
 database:str = 'postgres'
 connection = db.connect(user=user, password=password, host=host, port=port, database=database)
-rows = 500
+rows = 50
 
 for table_name, field_list in field_dict_list.items():
     x = []
