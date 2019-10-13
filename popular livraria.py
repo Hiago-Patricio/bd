@@ -257,7 +257,8 @@ field_dict_list[table_name] = [
     'fkFuncionarioId-FK-Funcionario-funcionarioId',
     'data-DATE',
     'precoTotal-FLOAT',
-    'precoFinal-FLOAT']
+    'precoFinal-FLOAT'
+]
 
 table_name = 'ProdutosComprados'
 table_name_list.append(table_name)
