@@ -256,8 +256,7 @@ field_dict_list[table_name] = [
     'fkCLienteId-FK-Cliente-clienteId',
     'fkFuncionarioId-FK-Funcionario-funcionarioId',
     'data-DATE',
-    'precoTotal-FLOAT',
-    'precoFinal-FLOAT'
+    'preco-FLOAT'
 ]
 
 table_name = 'ProdutosComprados'
@@ -287,7 +286,7 @@ host:str = '127.0.0.1'
 port:str = '5432'
 database:str = 'postgres'
 connection = db.connect(user=user, password=password, host=host, port=port, database=database)
-rows = 50
+rows = 150
 
 for table_name, field_list in field_dict_list.items():
     x = []
@@ -304,4 +303,6 @@ for table_name, field_list in field_dict_list.items():
         query = create_insert_query(table_name, field_name_list, field_data_list)
         if insert_data_in_table(connection, query):
             inserted_rows += 1
+        else:
+            print(query)
     print('{} linhas inseridas na tabela {}.'.format(inserted_rows, table_name))

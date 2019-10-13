@@ -98,9 +98,7 @@ CREATE TABLE Compra (
     fkCLienteId INTEGER REFERENCES Cliente(clienteId) NOT NULL,
     fkFuncionarioId INTEGER REFERENCES Funcionario(funcionarioId) NOT NULL,
     data DATE NOT NULL,
-    precoTotal FLOAT NOT NULL CHECK(precoTotal >= 0),
-    desconto FLOAT NOT NULL CHECK(desconto >= 0) DEFAULT 0,
-    precoFinal FLOAT NOT NULL CHECK(precoFinal >= 0)
+    preco FLOAT NOT NULL CHECK(preco >= 0) DEFAULT 0
 );
 
 CREATE TABLE ProdutosComprados (
@@ -109,5 +107,6 @@ CREATE TABLE ProdutosComprados (
     fkMidiaId INTEGER REFERENCES Midia(midiaId) NOT NULL,
     quantidade INTEGER NOT NULL CHECK(quantidade > 0),
     descontoUnidade FLOAT NOT NULL CHECK(descontoUnidade >= 0) DEFAULT 0,
-    precoUnidade FLOAT NOT NULL CHECK(precoUnidade >= 0)
+    precoUnidade FLOAT NOT NULL CHECK(precoUnidade >= 0),
+    CHECK (precoUnidade >= descontoUnidade)
 );
