@@ -17,7 +17,7 @@ END;
 $BODY$ LANGUAGE plpgsql;
 
 CREATE TRIGGER desconto_25_a_cada_10_compras_TG
-AFTER INSERT ON COMPRA
+AFTER INSERT ON ProdutosComprados
 FOR EACH ROW
 EXECUTE PROCEDURE
 desconto_25_a_cada_10_compras_FUNC();

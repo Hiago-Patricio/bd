@@ -6,8 +6,8 @@ BEGIN
 	SELECT vip
 	INTO bol_vip
 	FROM Cliente
-	WHERE ClienteId = NEW.ClientId;
-	IF vip = t THEN
+	WHERE ClienteId = NEW.ClienteId;
+	IF vip = TRUE THEN
 		UPDATE Compra
 		SET desconto = desconto + 10
 		WHERE fkClienteId = NEW.ClienteId
@@ -17,7 +17,6 @@ END;
 $BODY$ LANGUAGE plpgsql;
 
 CREATE TRIGGER desconto_10_para_vip_TG
-BEFORE INSERT ON COMPRA
+AFTER INSERT ON ProdutosComprados
 FOR EACH ROW
-EXECUTE PROCEDURE
-desconto_10_para_vip_FUNC();
+EXECUTE PROCEDURE desconto_10_para_vip_FUNC();
