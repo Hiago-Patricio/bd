@@ -93,7 +93,7 @@ def insert_data_in_table(connection, query: str):
             cursor.close()
             return True
         except:
-            cursor.rollback()
+            connection.rollback()
             cursor.close()
             return False
     return False
@@ -243,12 +243,11 @@ field_dict_list[table_name] = [
 table_name = 'Cliente'
 table_name_list.append(table_name)
 field_dict_list[table_name] = [
-    'endereco-ADDRESS',
     'quantidadeCompras-INTEGER',
+    'endereco-ADDRESS',
     'sexo-SEX',
     'nome-NAME',
-    'dataNascimento-DATE',
-    'vip-BOOLEAN'
+    'dataNascimento-DATE'
 ]
 
 table_name = 'Compra'
@@ -258,7 +257,6 @@ field_dict_list[table_name] = [
     'fkFuncionarioId-FK-Funcionario-funcionarioId',
     'data-DATE',
     'precoTotal-FLOAT',
-    'desconto-FLOAT',
     'precoFinal-FLOAT']
 
 table_name = 'ProdutosComprados'
@@ -267,7 +265,6 @@ field_dict_list[table_name] = [
     'fkCompraId-FK-Compra-compraId',
     'fkMidiaId-FK-Midia-midiaId',
     'quantidade-INTEGER',
-    'descontoUnidade-FLOAT',
     'precoUnidade-FLOAT'
 ]
 

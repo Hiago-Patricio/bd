@@ -90,7 +90,7 @@ CREATE TABLE Cliente (
     sexo VARCHAR NOT NULL,
     nome VARCHAR NOT NULL,
     dataNascimento DATE NOT NULL,
-    vip BOOLEAN NOT NULL
+    vip BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE Compra (
@@ -99,7 +99,7 @@ CREATE TABLE Compra (
     fkFuncionarioId INTEGER REFERENCES Funcionario(funcionarioId) NOT NULL,
     data DATE NOT NULL,
     precoTotal FLOAT NOT NULL CHECK(precoTotal >= 0),
-    desconto FLOAT NOT NULL CHECK(desconto >= 0),
+    desconto FLOAT NOT NULL CHECK(desconto >= 0) DEFAULT 0,
     precoFinal FLOAT NOT NULL CHECK(precoFinal >= 0)
 );
 
@@ -108,6 +108,6 @@ CREATE TABLE ProdutosComprados (
     fkCompraId INTEGER REFERENCES Compra(compraId) NOT NULL,
     fkMidiaId INTEGER REFERENCES Midia(midiaId) NOT NULL,
     quantidade INTEGER NOT NULL CHECK(quantidade > 0),
-    descontoUnidade FLOAT NOT NULL CHECK(descontoUnidade >= 0),
+    descontoUnidade FLOAT NOT NULL CHECK(descontoUnidade >= 0) DEFAULT 0,
     precoUnidade FLOAT NOT NULL CHECK(precoUnidade >= 0)
 );
