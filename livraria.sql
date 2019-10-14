@@ -13,19 +13,19 @@ DROP TABLE IF EXISTS Genero;
 
 CREATE TABLE Genero (
     generoId SERIAL PRIMARY KEY,
-    nome VARCHAR NOT NULL,
-    localizacao VARCHAR NOT NULL
+    nome VARCHAR(255) NOT NULL,
+    localizacao VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE Midia (
     midiaId SERIAL PRIMARY KEY,
     fkGeneroId INTEGER REFERENCES Genero(generoId) NOT NULL,
-    tipo VARCHAR NOT NULL,
+    tipo VARCHAR(255) NOT NULL,
     dataPublicacao date NOT NULL,
-    editora VARCHAR NOT NULL,
-    nome VARCHAR NOT NULL,
-    idioma VARCHAR NOT NULL,
-    localPublicacao VARCHAR NOT NULL,
+    editora VARCHAR(255) NOT NULL,
+    nome VARCHAR(255) NOT NULL,
+    idioma VARCHAR(255) NOT NULL,
+    localPublicacao VARCHAR(255) NOT NULL,
     precoMidia FLOAT NOT NULL CHECK(precoMidia >= 0)
 );
 
@@ -33,14 +33,14 @@ CREATE TABLE Midia (
 CREATE TABLE Livro (
     livroId SERIAL PRIMARY KEY,
     fkMidiaId INTEGER REFERENCES Midia(midiaId) NOT NULL,
-    sinopse VARCHAR NOT NULL,
+    sinopse VARCHAR(255) NOT NULL,
     edicao INTEGER NOT NULL CHECK(edicao > 0),
     paginas INTEGER NOT NULL CHECK(paginas > 0)
 );
 
 CREATE TABLE Manga (
     mangaId SERIAL PRIMARY KEY,
-    nome VARCHAR NOT NULL,
+    nome VARCHAR(255) NOT NULL,
     adaptacaoAnime BOOLEAN NOT NULL,
     finalizado BOOLEAN NOT NULL
 );
@@ -49,7 +49,7 @@ CREATE TABLE Volume (
     volumeId SERIAL PRIMARY KEY,
     fkMidiaId INTEGER REFERENCES Midia(midiaId) NOT NULL,
     fkMangaId INTEGER REFERENCES Manga(mangaId) NOT NULL,
-    sinopse VARCHAR NOT NULL,
+    sinopse VARCHAR(255) NOT NULL,
     numero FLOAT NOT NULL CHECK(numero >= 0),
     quantidadeCapitulos INTEGER NOT NULL CHECK(quantidadeCapitulos > 0)
 );
@@ -57,14 +57,14 @@ CREATE TABLE Volume (
 CREATE TABLE Revista (
     revistaId SERIAL PRIMARY KEY,
     fkMidiaId INTEGER REFERENCES Midia(midiaId) NOT NULL,
-    empresa VARCHAR NOT NULL,
+    empresa VARCHAR(255) NOT NULL,
     edicao INTEGER NOT NULL CHECK(edicao > 0)
 );
 
 CREATE TABLE Autor (
     autorId SERIAL PRIMARY KEY,
-    nacionalidade VARCHAR NOT NULL,
-    nome VARCHAR NOT NULL,
+    nacionalidade VARCHAR(255) NOT NULL,
+    nome VARCHAR(255) NOT NULL,
     dataNascimento DATE NOT NULL,
     dataFalecimento DATE NOT NULL
 );
@@ -77,8 +77,8 @@ CREATE TABLE AutorMidia (
 
 CREATE TABLE Funcionario (
     funcionarioId SERIAL PRIMARY KEY,
-    funcao VARCHAR NOT NULL,
-    nome VARCHAR NOT NULL,
+    funcao VARCHAR(255) NOT NULL,
+    nome VARCHAR(255) NOT NULL,
     salario FLOAT NOT NULL CHECK(salario > 0),
     dataAdmissao DATE NOT NULL
 );
@@ -86,9 +86,9 @@ CREATE TABLE Funcionario (
 CREATE TABLE Cliente (
     clienteId SERIAL PRIMARY KEY,
     quantidadeCompras INTEGER NOT NULL,
-    endereco VARCHAR NOT NULL,
-    sexo VARCHAR NOT NULL,
-    nome VARCHAR NOT NULL,
+    endereco VARCHAR(255) NOT NULL,
+    sexo VARCHAR(255) NOT NULL,
+    nome VARCHAR(255) NOT NULL,
     dataNascimento DATE NOT NULL,
     vip BOOLEAN NOT NULL DEFAULT FALSE
 );

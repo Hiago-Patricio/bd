@@ -161,118 +161,125 @@ def generate_data(field: str, connection = None):
         return random_fk(connection, table_name, field_name)
     
 
+user:str = 'postgres'
+password:str = '123'
+host:str = '127.0.0.1'
+port:str = '5432'
+database:str = 'postgres'
+connection = db.connect(user=user, password=password, host=host, port=port, database=database)
+
 field_dict_list = {}
 table_name_list = []
 rows_list = []
 
-# table_name = 'Genero'
-# table_name_list.append(table_name)
-# field_dict_list[table_name] = [
-#     'nome-NAME',
-#     'localizacao-ADDRESS'
-# ]
-# rows_list.append(1)
+table_name = 'Genero'
+table_name_list.append(table_name)
+field_dict_list[table_name] = [
+    'nome-NAME',
+    'localizacao-ADDRESS'
+]
+rows_list.append(1)
 
-# table_name = 'Midia'
-# table_name_list.append(table_name)
-# field_dict_list[table_name] = [
-#     'fkGeneroId-FK-Genero-generoId',
-#     'tipo-MIDIA',
-#     'dataPublicacao-DATE',
-#     'editora-NAME',
-#     'nome-NAME',
-#     'idioma-NAME',
-#     'localPublicacao-ADDRESS',
-#     'precoMidia-FLOAT'
-# ]
-# rows_list.append(1)
+table_name = 'Midia'
+table_name_list.append(table_name)
+field_dict_list[table_name] = [
+    'fkGeneroId-FK-Genero-generoId',
+    'tipo-MIDIA',
+    'dataPublicacao-DATE',
+    'editora-NAME',
+    'nome-NAME',
+    'idioma-NAME',
+    'localPublicacao-ADDRESS',
+    'precoMidia-FLOAT'
+]
+rows_list.append(1)
 
-# table_name = 'Livro'
-# table_name_list.append(table_name)
-# field_dict_list[table_name] = [
-#     'fkMidiaId-FK-Midia-midiaId',
-#     'sinopse-TEXT',
-#     'edicao-INTEGER',
-#     'paginas-INTEGER'
-# ]
-# rows_list.append(1)
+table_name = 'Livro'
+table_name_list.append(table_name)
+field_dict_list[table_name] = [
+    'fkMidiaId-FK-Midia-midiaId',
+    'sinopse-TEXT',
+    'edicao-INTEGER',
+    'paginas-INTEGER'
+]
+rows_list.append(1)
 
-# table_name = 'Manga'
-# table_name_list.append(table_name)
-# field_dict_list[table_name] = [
-#     'nome-NAME',
-#     'adaptacaoAnime-BOOLEAN',
-#     'finalizado-TRUE'
-# ]
-# rows_list.append(1)
+table_name = 'Manga'
+table_name_list.append(table_name)
+field_dict_list[table_name] = [
+    'nome-NAME',
+    'adaptacaoAnime-BOOLEAN',
+    'finalizado-TRUE'
+]
+rows_list.append(1)
 
-# table_name = 'Volume'
-# table_name_list.append(table_name)
-# field_dict_list[table_name] = [
-#     'fkMidiaId-FK-Midia-midiaId',
-#     'fkMangaId-FK-Manga-mangaId',
-#     'sinopse-TEXT',
-#     'numero-FLOAT',
-#     'quantidadeCapitulos-INTEGER'
-# ]
-# rows_list.append(1)
+table_name = 'Volume'
+table_name_list.append(table_name)
+field_dict_list[table_name] = [
+    'fkMidiaId-FK-Midia-midiaId',
+    'fkMangaId-FK-Manga-mangaId',
+    'sinopse-TEXT',
+    'numero-FLOAT',
+    'quantidadeCapitulos-INTEGER'
+]
+rows_list.append(1)
 
-# table_name = 'Revista'
-# table_name_list.append(table_name)
-# field_dict_list[table_name] = [
-#     'fkMidiaId-FK-Midia-midiaId',
-#     'empresa-NAME',
-#     'edicao-INTEGER'
-# ]
-# rows_list.append(1)
+table_name = 'Revista'
+table_name_list.append(table_name)
+field_dict_list[table_name] = [
+    'fkMidiaId-FK-Midia-midiaId',
+    'empresa-NAME',
+    'edicao-INTEGER'
+]
+rows_list.append(1)
 
-# table_name = 'Autor'
-# table_name_list.append(table_name)
-# field_dict_list[table_name] = [
-#     'nacionalidade-NAME',
-#     'nome-NAME',
-#     'dataNascimento-DATE',
-#     'dataFalecimento-DATE'
-# ]
-# rows_list.append(1)
+table_name = 'Autor'
+table_name_list.append(table_name)
+field_dict_list[table_name] = [
+    'nacionalidade-NAME',
+    'nome-NAME',
+    'dataNascimento-DATE',
+    'dataFalecimento-DATE'
+]
+rows_list.append(1)
 
-# table_name = 'AutorMidia'
-# table_name_list.append(table_name)
-# field_dict_list[table_name] = [
-#     'fkAutorId-FK-Autor-autorId',
-#     'fkMidiaId-FK-Midia-midiaId'
-# ]
-# rows_list.append(1)
+table_name = 'AutorMidia'
+table_name_list.append(table_name)
+field_dict_list[table_name] = [
+    'fkAutorId-FK-Autor-autorId',
+    'fkMidiaId-FK-Midia-midiaId'
+]
+rows_list.append(1)
 
-# table_name = 'Funcionario'
-# table_name_list.append(table_name)
-# field_dict_list[table_name] = [
-#     'funcao-NAME',
-#     'nome-NAME',
-#     'salario-FLOAT',
-#     'dataAdmissao-DATE'
-# ]
-# rows_list.append(5)
+table_name = 'Funcionario'
+table_name_list.append(table_name)
+field_dict_list[table_name] = [
+    'funcao-NAME',
+    'nome-NAME',
+    'salario-FLOAT',
+    'dataAdmissao-DATE'
+]
+rows_list.append(5)
 
-# table_name = 'Cliente'
-# table_name_list.append(table_name)
-# field_dict_list[table_name] = [
-#     'quantidadeCompras-INTEGER',
-#     'endereco-ADDRESS',
-#     'sexo-SEX',
-#     'nome-NAME',
-#     'dataNascimento-DATE'
-# ]
-# rows_list.append(1)
+table_name = 'Cliente'
+table_name_list.append(table_name)
+field_dict_list[table_name] = [
+    'quantidadeCompras-INTEGER',
+    'endereco-ADDRESS',
+    'sexo-SEX',
+    'nome-NAME',
+    'dataNascimento-DATE'
+]
+rows_list.append(1)
 
-# table_name = 'Compra'
-# table_name_list.append(table_name)
-# field_dict_list[table_name] = [
-#     'fkCLienteId-FK-Cliente-clienteId',
-#     'fkFuncionarioId-FK-Funcionario-funcionarioId',
-#     'data-DATE'
-# ]
-# rows_list.append(10)
+table_name = 'Compra'
+table_name_list.append(table_name)
+field_dict_list[table_name] = [
+    'fkCLienteId-FK-Cliente-clienteId',
+    'fkFuncionarioId-FK-Funcionario-funcionarioId',
+    'data-DATE'
+]
+rows_list.append(10)
 
 table_name = 'ProdutosComprados'
 table_name_list.append(table_name)
@@ -295,15 +302,15 @@ if stop:
     sys.exit()
 
 
-user:str = 'postgres'
-password:str = '123'
-host:str = '127.0.0.1'
-port:str = '5432'
-database:str = 'postgres'
-connection = db.connect(user=user, password=password, host=host, port=port, database=database)
-
 for dict_item, rows in zip(field_dict_list.items(), rows_list):
     table_name, field_list = dict_item
+    if table_name == 'ProdutosComprados':
+        insert_data_in_table(connection, 
+        '''
+        UPDATE Midia
+        SET tipo = 'Volume';
+        ''')
+    
     x = []
     field_name_list = []
     for field in field_list:

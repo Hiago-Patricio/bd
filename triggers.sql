@@ -113,7 +113,6 @@ FOR EACH ROW
 EXECUTE PROCEDURE desconto_10_para_vip_FUNC();
 
 -- Se o mangá estiver finalizado o cliente recebe 20% de desconto na compra de todos os volumes do mangá
--- OK
 CREATE OR REPLACE FUNCTION desconto_de_20_porcento_na_colecao_completa_de_manga_FUNC()
 RETURNS TRIGGER AS $BODY$
 DECLARE 
@@ -121,6 +120,7 @@ DECLARE
     mangaId INTEGER;
     quantidade_volumes_comprados INTEGER;
     quantidade_volumes_existentes INTEGER;
+	tipo_inserido VARCHAR(255);
 BEGIN
     SELECT Manga.finalizado
     INTO finalizado
@@ -152,9 +152,19 @@ BEGIN
             ProdutosComprados.fkMidiaId = Midia.MidiaId AND
 			-- Seleciona os volumes
 			Midia.tipo = 'Volume';
-        
-		quantidade_volumes_comprados = quantidade_volumes_comprados + 1; 
-        IF quantidade_volumes_comprados = quantidade_volumes_existentes THEN
+     
+		SELECT M.tipo
+		INTO tipo_inserido
+		FROM ProdutosComprados PC, Midia M
+		WHERE PC.fkMidiaID = M.midiaID;
+	 
+        -- Não sei porque não funciona
+		IF tipo_inserido = 'Volume' THEN
+			NEW.descontoUnidade = NEW.descontoUnidade + NEW.precoUnidade * 0.2;
+			quantidade_volumes_comprados = quantidade_volumes_comprados + 1;
+		END IF;
+		
+		IF quantidade_volumes_comprados = quantidade_volumes_existentes THEN
              UPDATE ProdutosComprados
              SET descontoUnidade = descontoUnidade + precoUnidade * 0.2
              FROM Volume
@@ -163,15 +173,14 @@ BEGIN
                  NEW.fkCompraId = ProdutosComprados.fkCompraId AND
                  -- Seleciona os volumes comprados
                  ProdutosComprados.fkMidiaId = Volume.fkMidiaId;
-			NEW.descontoUnidade = NEW.descontoUnidade + NEW.precoUnidade * 0.2;
-		END IF;
+		END IF;		
     END IF;
 
 	RETURN NEW;
 END;
 $BODY$ LANGUAGE plpgsql;
 
-CREATE TRIGGER desconto_de_20_porcento_na_colecao_completa_de_manga_TG
+CREATE TRIGGER ab_desconto_de_20_porcento_na_colecao_completa_de_manga_TG
 BEFORE INSERT ON ProdutosComprados
 FOR EACH ROW
 EXECUTE PROCEDURE desconto_de_20_porcento_na_colecao_completa_de_manga_FUNC();
