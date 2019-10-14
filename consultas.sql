@@ -11,7 +11,7 @@ WHERE vip = TRUE;
 
 	--Histórico de gasto do cliente
 
-SELECT c.clienteId, c.nome, co.data, co.precoTotal, co.desconto, co.precoFinal
+SELECT c.clienteId, c.nome, co.data, co.preco
 FROM Cliente c, Compra co
 WHERE c.clienteId = co.fkClienteId
 ORDER BY c.clienteId;
