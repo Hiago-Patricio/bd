@@ -25,7 +25,7 @@ CREATE TABLE TipoMidia(
 CREATE TABLE Midia (
     midiaId SERIAL PRIMARY KEY,
     fkGeneroId INTEGER REFERENCES Genero(generoId) NOT NULL,
-    fkTipoMidiaId VARCHAR(255) NOT NULL,
+    fkTipoMidiaId INTEGER NOT NULL REFERENCES TipoMidia(tipoMidiaId),
     dataPublicacao date NOT NULL,
     editora VARCHAR(255) NOT NULL,
     nome VARCHAR(255) NOT NULL,
