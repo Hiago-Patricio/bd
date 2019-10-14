@@ -141,27 +141,31 @@ BEGIN
         FROM Volume
         WHERE Volume.fkMangaId = mangaId;
         
-        SELECT COUNT (DISTINCT Volume.volumeId)
+        SELECT COUNT (DISTINCT ProdutosComprados.fkMidiaId)
         INTO quantidade_volumes_comprados
-        FROM ProdutosComprados, Volume
+        FROM ProdutosComprados, Midia
         WHERE 
             -- Seleciona a compra
             NEW.fkCompraId = ProdutosComprados.fkCompraId AND
-            -- Seleciona os volumes comprados
-            ProdutosComprados.fkMidiaId = Volume.fkMidiaId;
+            -- Seleciona as mídias comprados
+            ProdutosComprados.fkMidiaId = Midia.MidiaId AND
+			-- Seleciona os volumes
+			Midia.tipo = 'Volume';
         
+		quantidade_volumes_comprados = quantidade_volumes_comprados + 1; 
         IF quantidade_volumes_comprados = quantidade_volumes_existentes THEN
-            UPDATE ProdutosComprados
-            SET descontoUnidade = descontoUnidade + precoUnidade * 0.2
-            FROM Volume
-            WHERE 
-                -- Seleciona a compra
-                NEW.fkCompraId = ProdutosComprados.fkCompraId AND
-                -- Seleciona os volumes comprados
-                ProdutosComprados.fkMidiaId = Volume.fkMidiaId;
-        END IF;
+             UPDATE ProdutosComprados
+             SET descontoUnidade = descontoUnidade + precoUnidade * 0.2
+             FROM Volume
+             WHERE 
+                 -- Seleciona a compra
+                 NEW.fkCompraId = ProdutosComprados.fkCompraId AND
+                 -- Seleciona os volumes comprados
+                 ProdutosComprados.fkMidiaId = Volume.fkMidiaId;
+			NEW.descontoUnidade = NEW.descontoUnidade + NEW.precoUnidade * 0.2;
+		END IF;
     END IF;
-    -- NEW.descontoUnidade = quantidade_volumes_comprados;
+
 	RETURN NEW;
 END;
 $BODY$ LANGUAGE plpgsql;
