@@ -10,7 +10,7 @@ import psycopg2 as db
 Input with 2 args: fieldName-DATA_TYPE
 Input with 4 args: fieldName-DATA_TYPE-TableName-fieldName
 '''
-data_types_with_2_args = ['INTEGER', 'FLOAT', 'DATE', 'BOOLEAN', 'NAME', 'ADDRESS', 'TEXT', 'SEX', 'MIDIA']
+data_types_with_2_args = ['INTEGER', 'FLOAT', 'DATE', 'BOOLEAN', 'NAME', 'ADDRESS', 'TEXT', 'SEX', 'MIDIA', 'TRUE', 'FALSE']
 data_types_with_4_args = ['FK']
 def validate_info(field_list: list):
     valid_list_field = []
@@ -136,11 +136,15 @@ def generate_data(field: str, connection = None):
     if data_type == 'INTEGER':
         return random.randrange(1, 100)
     elif data_type == 'FLOAT':
-        return random.uniform(1, 100)
+        return random.uniform(20, 100)
     elif data_type == 'DATE':
         return random_date()
     elif data_type == 'BOOLEAN':
         return bool(random.randrange(0,2))
+    elif data_type == 'TRUE':
+        return True
+    elif data_type == 'FALSE':
+        return False
     elif data_type == 'NAME':
         return faker.Faker().name()
     elif data_type == 'ADDRESS':
@@ -159,6 +163,7 @@ def generate_data(field: str, connection = None):
 
 field_dict_list = {}
 table_name_list = []
+rows_list = []
 
 table_name = 'Genero'
 table_name_list.append(table_name)
@@ -166,6 +171,7 @@ field_dict_list[table_name] = [
     'nome-NAME',
     'localizacao-ADDRESS'
 ]
+rows_list.append(1)
 
 table_name = 'Midia'
 table_name_list.append(table_name)
@@ -179,6 +185,7 @@ field_dict_list[table_name] = [
     'localPublicacao-ADDRESS',
     'precoMidia-FLOAT'
 ]
+rows_list.append(1)
 
 table_name = 'Livro'
 table_name_list.append(table_name)
@@ -188,14 +195,16 @@ field_dict_list[table_name] = [
     'edicao-INTEGER',
     'paginas-INTEGER'
 ]
+rows_list.append(1)
 
 table_name = 'Manga'
 table_name_list.append(table_name)
 field_dict_list[table_name] = [
     'nome-NAME',
     'adaptacaoAnime-BOOLEAN',
-    'finalizado-BOOLEAN'
+    'finalizado-TRUE'
 ]
+rows_list.append(1)
 
 table_name = 'Volume'
 table_name_list.append(table_name)
@@ -206,6 +215,7 @@ field_dict_list[table_name] = [
     'numero-FLOAT',
     'quantidadeCapitulos-INTEGER'
 ]
+rows_list.append(1)
 
 table_name = 'Revista'
 table_name_list.append(table_name)
@@ -214,6 +224,7 @@ field_dict_list[table_name] = [
     'empresa-NAME',
     'edicao-INTEGER'
 ]
+rows_list.append(1)
 
 table_name = 'Autor'
 table_name_list.append(table_name)
@@ -223,6 +234,7 @@ field_dict_list[table_name] = [
     'dataNascimento-DATE',
     'dataFalecimento-DATE'
 ]
+rows_list.append(1)
 
 table_name = 'AutorMidia'
 table_name_list.append(table_name)
@@ -230,6 +242,7 @@ field_dict_list[table_name] = [
     'fkAutorId-FK-Autor-autorId',
     'fkMidiaId-FK-Midia-midiaId'
 ]
+rows_list.append(1)
 
 table_name = 'Funcionario'
 table_name_list.append(table_name)
@@ -239,6 +252,7 @@ field_dict_list[table_name] = [
     'salario-FLOAT',
     'dataAdmissao-DATE'
 ]
+rows_list.append(5)
 
 table_name = 'Cliente'
 table_name_list.append(table_name)
@@ -249,24 +263,25 @@ field_dict_list[table_name] = [
     'nome-NAME',
     'dataNascimento-DATE'
 ]
+rows_list.append(1)
 
 table_name = 'Compra'
 table_name_list.append(table_name)
 field_dict_list[table_name] = [
     'fkCLienteId-FK-Cliente-clienteId',
     'fkFuncionarioId-FK-Funcionario-funcionarioId',
-    'data-DATE',
-    'preco-FLOAT'
+    'data-DATE'
 ]
+rows_list.append(10)
 
 table_name = 'ProdutosComprados'
 table_name_list.append(table_name)
 field_dict_list[table_name] = [
     'fkCompraId-FK-Compra-compraId',
     'fkMidiaId-FK-Midia-midiaId',
-    'quantidade-INTEGER',
-    'precoUnidade-FLOAT'
+    'quantidade-INTEGER'
 ]
+rows_list.append(10)
 
 
 for table_name, field_list in field_dict_list.items():
@@ -286,9 +301,9 @@ host:str = '127.0.0.1'
 port:str = '5432'
 database:str = 'postgres'
 connection = db.connect(user=user, password=password, host=host, port=port, database=database)
-rows = 150
 
-for table_name, field_list in field_dict_list.items():
+for dict_item, rows in zip(field_dict_list.items(), rows_list):
+    table_name, field_list = dict_item
     x = []
     field_name_list = []
     for field in field_list:

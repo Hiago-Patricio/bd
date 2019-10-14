@@ -106,7 +106,8 @@ CREATE TABLE ProdutosComprados (
     fkCompraId INTEGER REFERENCES Compra(compraId) NOT NULL,
     fkMidiaId INTEGER REFERENCES Midia(midiaId) NOT NULL,
     quantidade INTEGER NOT NULL CHECK(quantidade > 0),
+    precoUnidade FLOAT CHECK(precoUnidade >= 0),
     descontoUnidade FLOAT NOT NULL CHECK(descontoUnidade >= 0) DEFAULT 0,
-    precoUnidade FLOAT NOT NULL CHECK(precoUnidade >= 0),
-    CHECK (precoUnidade >= descontoUnidade)
+    CHECK (precoUnidade >= descontoUnidade),
+    UNIQUE(fkCompraId, fkMidiaId)
 );
