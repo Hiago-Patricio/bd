@@ -113,6 +113,7 @@ FOR EACH ROW
 EXECUTE PROCEDURE desconto_10_para_vip_FUNC();
 
 -- Se o mangá estiver finalizado o cliente recebe 20% de desconto na compra de todos os volumes do mangá
+-- OK
 CREATE OR REPLACE FUNCTION desconto_de_20_porcento_na_colecao_completa_de_manga_FUNC()
 RETURNS TRIGGER AS $BODY$
 DECLARE 
