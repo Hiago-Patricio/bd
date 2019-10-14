@@ -17,10 +17,15 @@ CREATE TABLE Genero (
     localizacao VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE TipoMidia(
+    tipoMidiaId SERIAL PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL
+);
+
 CREATE TABLE Midia (
     midiaId SERIAL PRIMARY KEY,
     fkGeneroId INTEGER REFERENCES Genero(generoId) NOT NULL,
-    tipo VARCHAR(255) NOT NULL,
+    fkTipoMidiaId VARCHAR(255) NOT NULL,
     dataPublicacao date NOT NULL,
     editora VARCHAR(255) NOT NULL,
     nome VARCHAR(255) NOT NULL,
