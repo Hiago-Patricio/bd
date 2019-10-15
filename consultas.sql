@@ -6,50 +6,50 @@ ORDER BY clienteId;
 	--Seleciona clientes
 CREATE VIEW cliente_view AS
 SELECT clienteId, nome, quantidadeCompras, vip, sexo, endereco, dataNascimento
-FROM cliente
+FROM cliente;
 
 	--Seleciona Compra
 CREATE VIEW compra_view AS
 SELECT compraId, data, preco, fkClienteId, fkFuncionarioId
-FROM Compra
+FROM Compra;
 
 	--Seleciona ProdutosComprados
 CREATE VIEW produtosComprados_view AS
 SELECT produtosCompradosId, fkCompraId, fkMidiaId, quantidade, precoUnidade, descontoUnidade
-FROM ProdutosComprados
+FROM ProdutosComprados;
 
 	--Seleciona Midias
 CREATE VIEW midia_view AS
 SELECT tm.nome, m.midiaId, fkGeneroId, m.nome, m.dataPublicacao, m.idioma, m.localPublicacao, m.editora, m.precoMidia
 FROM Midia m, TipoMidia tm
 WHERE m.fkTipoMidiaId = tm.tipoMidiaId
-ORDER BY m.tipo;
+ORDER BY tm.nome;
 
 	-- Livro
 CREATE VIEW livro_view AS
 SELECT livroId, fkMidiaId, sinopse, edicao, paginas
-FROM Livro
+FROM Livro;
 
 	--Revista
 CREATE VIEW revista_view AS
 SELECT revistaId, fkMidiaId, empresa, edicao
-FROM Revista
+FROM Revista;
 	
 	--Manga
 CREATE VIEW manga_view AS
 SELECT mangaId, nome, adaptacaoAnime, finalizado
-FROM Manga
+FROM Manga;
 
 	--Volume do manga
 CREATE VIEW volume_view AS
 SELECT volumeId, fkMidiaId, fkMangaId, sinopse, numero, quantidadeCapitulos
-FROM Volume
+FROM Volume;
 
 
 	--Seleciona genero
 CREATE VIEW genero_view AS
 SELECT generoId, nome, localizacao
-FROM Genero 
+FROM Genero;
 
 	--SelecionaAutores e suas obras disponiveis na livraria
 CREATE VIEW autor_view AS
@@ -61,15 +61,16 @@ ORDER BY a.nome;
 	--Seleciona Funcionarios
 CREATE VIEW funcionario_view AS
 SELECT funcionarioId, nome, funcao, salario, dataAdmissao
-FROM Funcionario
+FROM Funcionario;
 
 
 	--Seleciona cliente e suas compras
-SELECT cv.nome, cov.data, cov.preco, fv.nome, mv.m.nome, gv.nome, mv.tm.nome pcv.precoUnidade, pcv.quantidade
+SELECT cv.nome, cov.data, cov.preco, fv.nome, mv.m.nome, gv.nome, mv.tm.nome, pcv.precoUnidade, pcv.quantidade
 FROM cliente_view cv
 LEFT OUTER JOIN compra_view cov ON cv.clienteId = cov.fkClienteId
 LEFT OUTER JOIN produtosComprados_view pcv ON pcv.fkCompraId = cov.compraId
 LEFT OUTER JOIN funcionario_view fv ON co.fkFuncionarioId = f.funcionarioId
 LEFT OUTER JOIN midia_view mv ON mv.midiaId = pcv.fkMidiaId
-LEFT OUTER JOIN genero_view gv ON gv.generoId = mv.fkGeneroId 
+LEFT OUTER JOIN genero_view gv ON gv.generoId = mv.fkGeneroId
+ORDER BY cv.nome;
 
