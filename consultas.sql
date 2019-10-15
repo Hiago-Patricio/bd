@@ -5,7 +5,7 @@ ORDER BY clienteId;
 
 	--Seleciona clientes
 CREATE VIEW cliente_view AS
-SELECT clienteid, nome, quantidadeCompras, vip, sexo, endereco, dataNascimento
+SELECT clienteId, nome, quantidadeCompras, vip, sexo, endereco, dataNascimento
 FROM cliente
 
 	--Seleciona Compra
@@ -25,9 +25,25 @@ FROM Midia m, TipoMidia tm
 WHERE m.fkTipoMidiaId = tm.tipoMidiaId
 ORDER BY m.tipo;
 
-	-- Midia com tipo ARRUMAR ARRUMAR ARRUMAR ARRUMAR ARRUMAR
-CREATE VIEW tipo_view AS
-SELECT 
+	-- Livro
+CREATE VIEW livro_view AS
+SELECT livroId, fkMidiaId, sinopse, edicao, paginas
+FROM Livro
+
+	--Revista
+CREATE VIEW revista_view AS
+SELECT revistaId, fkMidiaId, empresa, edicao
+FROM Revista
+	
+	--Manga
+CREATE VIEW manga_view AS
+SELECT mangaId, nome, adaptacaoAnime, finalizado
+FROM Manga
+
+	--Volume do manga
+CREATE VIEW volume_view AS
+SELECT volumeId, fkMidiaId, fkMangaId, sinopse, numero, quantidadeCapitulos
+FROM Volume
 
 
 	--Seleciona genero
@@ -47,4 +63,13 @@ CREATE VIEW funcionario_view AS
 SELECT funcionarioId, nome, funcao, salario, dataAdmissao
 FROM Funcionario
 
+
+	--Seleciona cliente e suas compras
+SELECT cv.nome, cov.data, cov.preco, fv.nome, mv.m.nome, gv.nome, mv.tm.nome pcv.precoUnidade, pcv.quantidade
+FROM cliente_view cv
+LEFT OUTER JOIN compra_view cov ON cv.clienteId = cov.fkClienteId
+LEFT OUTER JOIN produtosComprados_view pcv ON pcv.fkCompraId = cov.compraId
+LEFT OUTER JOIN funcionario_view fv ON co.fkFuncionarioId = f.funcionarioId
+LEFT OUTER JOIN midia_view mv ON mv.midiaId = pcv.fkMidiaId
+LEFT OUTER JOIN genero_view gv ON gv.generoId = mv.fkGeneroId 
 
