@@ -196,7 +196,6 @@ def run_intervaled(field_dict_list: dict, rows_list: list):
                 query = create_insert_query(table_name, field_name_list, field_data_list)
                 if not execute_query(connection, query):
                     print('Query falha: ', query)
-
         for i, j in zip(range(len(rows_list)), rows_list):
             rows_list[i] -= 1
 
@@ -251,14 +250,14 @@ field_dict_list_to_run_in_sequence[table_name] = [
     'nome-Genero_nome',
     'localizacao-Genero_localizacao'
 ]
-rows_list_to_run_in_sequence.append(1)
+rows_list_to_run_in_sequence.append(10)
 
 table_name = 'TipoMidia'
 table_name_list.append(table_name)
 field_dict_list_to_run_in_sequence[table_name] = [
     'nome-Midia_nome'
 ]
-rows_list_to_run_in_sequence.append(1)
+rows_list_to_run_in_sequence.append(10)
 
 
 table_name = 'Midia'
@@ -273,7 +272,7 @@ field_dict_list_to_run_in_sequence[table_name] = [
     'localPublicacao-Midia_nacionalidade',
     'precoMidia-FLOAT'
 ]
-rows_list_to_run_in_sequence.append(1)
+rows_list_to_run_in_sequence.append(10)
 
 table_name = 'Livro'
 table_name_list.append(table_name)
@@ -283,7 +282,7 @@ field_dict_list_to_run_in_sequence[table_name] = [
     'edicao-INTEGER',
     'paginas-INTEGER'
 ]
-rows_list_to_run_in_sequence.append(1)
+rows_list_to_run_in_sequence.append(10)
 
 table_name = 'Manga'
 table_name_list.append(table_name)
@@ -292,7 +291,7 @@ field_dict_list_to_run_in_sequence[table_name] = [
     'adaptacaoAnime-BOOLEAN',
     'finalizado-BOOLEAN'
 ]
-rows_list_to_run_in_sequence.append(1)
+rows_list_to_run_in_sequence.append(10)
 
 table_name = 'Volume'
 table_name_list.append(table_name)
@@ -303,7 +302,7 @@ field_dict_list_to_run_in_sequence[table_name] = [
     'numero-FLOAT',
     'quantidadeCapitulos-INTEGER'
 ]
-rows_list_to_run_in_sequence.append(1)
+rows_list_to_run_in_sequence.append(10)
 
 table_name = 'Revista'
 table_name_list.append(table_name)
@@ -312,7 +311,7 @@ field_dict_list_to_run_in_sequence[table_name] = [
     'empresa-Revista_empresa',
     'edicao-INTEGER'
 ]
-rows_list_to_run_in_sequence.append(1)
+rows_list_to_run_in_sequence.append(10)
 
 table_name = 'Autor'
 table_name_list.append(table_name)
@@ -322,7 +321,7 @@ field_dict_list_to_run_in_sequence[table_name] = [
     'dataNascimento-DATE',
     'dataFalecimento-DATE'
 ]
-rows_list_to_run_in_sequence.append(1)
+rows_list_to_run_in_sequence.append(10)
 
 table_name = 'AutorMidia'
 table_name_list.append(table_name)
@@ -330,7 +329,7 @@ field_dict_list_to_run_in_sequence[table_name] = [
     'fkAutorId-FK-Autor-autorId',
     'fkMidiaId-FK-Midia-midiaId'
 ]
-rows_list_to_run_in_sequence.append(1)
+rows_list_to_run_in_sequence.append(10)
 
 table_name = 'Funcionario'
 table_name_list.append(table_name)
@@ -340,7 +339,7 @@ field_dict_list_to_run_in_sequence[table_name] = [
     'salario-FLOAT',
     'dataAdmissao-DATE'
 ]
-rows_list_to_run_in_sequence.append(1)
+rows_list_to_run_in_sequence.append(10)
 
 table_name = 'Cliente'
 table_name_list.append(table_name)
@@ -351,7 +350,7 @@ field_dict_list_to_run_in_sequence[table_name] = [
     'nome-NAME',
     'dataNascimento-DATE'
 ]
-rows_list_to_run_in_sequence.append(5)
+rows_list_to_run_in_sequence.append(10)
 
 table_name = 'Compra'
 table_name_list.append(table_name)
@@ -360,7 +359,7 @@ field_dict_list_to_run_intervaled[table_name] = [
     'fkFuncionarioId-FK-Funcionario-funcionarioId',
     'data-DATE'
 ]
-rows_list_to_run_intervaled.append(5)
+rows_list_to_run_intervaled.append(1)
 
 table_name = 'ProdutosComprados'
 table_name_list.append(table_name)
@@ -369,7 +368,7 @@ field_dict_list_to_run_intervaled[table_name] = [
     'fkMidiaId-FK-Midia-midiaId',
     'quantidade-INTEGER'
 ]
-rows_list_to_run_intervaled.append(3)
+rows_list_to_run_intervaled.append(1)
 
 for table_name, field_list in list(field_dict_list_to_run_in_sequence.items()) + list(field_dict_list_to_run_intervaled.items()):
     stop = False

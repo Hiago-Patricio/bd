@@ -19,6 +19,5 @@ Regras de negócio da livraria:
 18 - Na 100ª compra o cliente vira vip
 19 - Cliente vip tem 10% de desconto no valor inicial da compra
 20 - Cliente recebe 10% de desconto no valor da mídia a partir de 5 unidades dela
-// Se o Hiago não conseguir fazer apagar a linha e apresentar sem, ele vai falar se conseguiu até 13h
 21 - A cada 10 compras o cliente ganha 25% de desconto
 22 - Se o mangá estiver finalizado o cliente recebe 20% de desconto na compra de todos os volumes do mangá

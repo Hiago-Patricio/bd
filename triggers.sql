@@ -5,10 +5,10 @@ RETURNS TRIGGER AS $BODY$
 DECLARE
     preco_midia FLOAT;
 BEGIN
-    SELECT Midia.precoMidia
+    SELECT M.precoMidia
     INTO preco_midia
-    FROM Midia
-    WHERE NEW.fkMidiaId = Midia.midiaId;
+    FROM Midia M
+    WHERE NEW.fkMidiaId = M.midiaId;
 
     NEW.precoUnidade = preco_midia;
 
@@ -45,12 +45,12 @@ RETURNS TRIGGER AS $BODY$
 DECLARE 
 	bool_vip BOOLEAN;
 BEGIN
-	SELECT Cliente.vip
+	SELECT Cl.vip
 	INTO bool_vip
-	FROM Cliente, Compra
-	WHERE 
-        NEW.fkCompraId = Compra.compraId AND
-        Compra.fkClienteId = Cliente.clienteID;
+	FROM Cliente Cl
+    JOIN Compra C
+    ON C.fkClienteId = Cl.clienteId
+	WHERE NEW.fkCompraId = C.compraId;
 
 	IF bool_vip = TRUE THEN
         NEW.descontoUnidade = NEW.descontoUnidade + NEW.precoUnidade * 0.1;
@@ -70,19 +70,19 @@ CREATE OR REPLACE FUNCTION desconto_25_a_cada_10_compras_FUNC()
 RETURNS TRIGGER AS $BODY$
 DECLARE 
 	quantidade_compras INTEGER;
-    clienteID INTEGER;
+    clienteId INTEGER;
 BEGIN
-    SELECT Cliente.clienteid
-    INTO clienteID
-    FROM Cliente, Compra
-    WHERE
-        NEW.fkCompraId = Compra.compraId AND
-        Compra.fkClienteId = Cliente.clienteId; 
+    SELECT Cl.clienteId
+    INTO clienteId
+    FROM Cliente Cl
+    JOIN Compra C
+    ON C.fkClienteId = Cl.clienteId 
+    WHERE NEW.fkCompraId = C.compraId;
 
 	SELECT COUNT(*)
 	INTO quantidade_compras
-	FROM Compra
-    WHERE clienteID = Compra.fkClienteId;   
+	FROM Compra C
+    WHERE clienteID = C.fkClienteId;   
         
 	IF quantidade_compras > 0 AND quantidade_compras % 10 = 0 THEN
         NEW.descontoUnidade = NEW.descontoUnidade + NEW.precoUnidade * 0.25;
@@ -106,20 +106,20 @@ DECLARE
     quantidade_volumes_comprados INTEGER;
     quantidade_volumes_existentes INTEGER;
 BEGIN
-    SELECT Manga.finalizado
+    SELECT M.finalizado
     INTO finalizado
-    FROM Manga, Midia, Volume
-    WHERE 
-        NEW.fkMidiaId = Volume.fkMidiaId AND
-        Volume.fkMangaId = Manga.mangaId;
+    FROM Manga M
+    JOIN Volume V
+    ON V.fkMangaId = M.mangaId
+    WHERE NEW.fkMidiaId = V.fkMidiaId;
 
     IF finalizado = TRUE THEN
         SELECT M.mangaId
         INTO mangaId
-        FROM Manga M, Volume V
-        WHERE 
-            NEW.fkMidiaId = V.fkMidiaId AND
-            V.fkMangaId = M.mangaId;
+        FROM Manga M
+        JOIN Volume V
+        ON V.fkMangaId = M.mangaId
+        WHERE NEW.fkMidiaId = V.fkMidiaId;
 
         SELECT COUNT (DISTINCT V.volumeId)
         INTO quantidade_volumes_existentes
@@ -128,23 +128,25 @@ BEGIN
 
         SELECT COUNT (DISTINCT PC.produtosCompradosId)
         INTO quantidade_volumes_comprados
-        FROM ProdutosComprados PC, Midia M, TipoMidia TP
+        FROM ProdutosComprados PC
+        JOIN Midia M
+        ON PC.fkMidiaId = M.midiaID
+        JOIN TipoMidia TP
+        ON M.fkTipoMidiaId = TP.tipoMidiaId
         WHERE 
             NEW.fkCompraId = PC.fkCompraId
-            AND PC.fkMidiaId = M.midiaID
-            AND M.fkTipoMidiaId = TP.tipoMidiaId
             AND TP.nome = 'Volume';
      
 
 		IF quantidade_volumes_comprados = quantidade_volumes_existentes THEN
-            UPDATE ProdutosComprados
+            UPDATE ProdutosComprados PC
             SET descontoUnidade = descontoUnidade + precoUnidade * 0.2
-            FROM Volume
+            FROM Volume V
             WHERE 
                 -- Seleciona a compra
-                NEW.fkCompraId = ProdutosComprados.fkCompraId AND
+                NEW.fkCompraId = PC.fkCompraId AND
                 -- Seleciona os volumes comprados
-                ProdutosComprados.fkMidiaId = Volume.fkMidiaId;
+                PC.fkMidiaId = V.fkMidiaId;
 		END IF;
     END IF;
 	RETURN NEW;
@@ -165,9 +167,9 @@ DECLARE
 BEGIN
     valor_final_produtos = (NEW.precoUnidade - NEW.descontoUnidade) * NEW.quantidade;
     
-    UPDATE Compra
+    UPDATE Compra C
     SET preco = preco + valor_final_produtos
-    WHERE compraId = NEW.fkCompraId;
+    WHERE C.compraId = NEW.fkCompraId;
     
     RETURN NEW;
 END;
@@ -178,28 +180,47 @@ AFTER INSERT ON ProdutosComprados
 FOR EACH ROW
 EXECUTE PROCEDURE atualiza_compra_FUNC();
 
--- Depois de 100 compras o cliente vira vip
+-- Atualiza quantidade de compras
 -- Sétimo
+CREATE OR REPLACE FUNCTION atualiza_quantidade_de_compras_FUNC()
+RETURNS TRIGGER AS $BODY$
+BEGIN
+    UPDATE Cliente Cl
+    SET quantidadeCompras = quantidadeCompras + 1
+    WHERE NEW.fkClienteId = Cl.clienteId;
+
+    RETURN NEW;
+END;
+$BODY$ LANGUAGE plpgsql;
+
+CREATE TRIGGER g_atualiza_quantidade_de_compras_TG
+AFTER INSERT ON Compra
+FOR EACH ROW 
+EXECUTE PROCEDURE atualiza_quantidade_de_compras_FUNC();
+
+
+-- Depois de 100 compras o cliente vira vip
+-- Oitavo
 CREATE OR REPLACE FUNCTION cliente_vira_vip_depois_de_100_compras_FUNC()
 RETURNS TRIGGER AS $BODY$
-DECLARE 
+DECLARE
     quantidade_compras INTEGER;
 BEGIN
-    SELECT COUNT(*) 
-    INTO quantidade_compras 
-    FROM Compra 
-    WHERE fkClienteId = NEW.fkClienteId; 
+    SELECT Cl.quantidadeCompras
+    INTO quantidade_compras
+    FROM Cliente Cl
+    WHERE Cl.clienteId = NEW.fkClienteId; 
     
     IF quantidade_compras = 100 THEN
-        UPDATE Cliente
+        UPDATE Cliente Cl
         SET vip = TRUE
-        WHERE clienteId = NEW.fkClienteId;
+        WHERE Cl.clienteId = NEW.fkClienteId;
     END IF;
     RETURN NEW;
 END;
 $BODY$ LANGUAGE plpgsql;
 
-CREATE TRIGGER g_cliente_vira_vip_depois_de_100_compras_TG
+CREATE TRIGGER h_cliente_vira_vip_depois_de_100_compras_TG
 AFTER INSERT ON Compra
 FOR EACH ROW 
 EXECUTE PROCEDURE cliente_vira_vip_depois_de_100_compras_FUNC();
