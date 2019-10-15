@@ -71,12 +71,20 @@ def execute_query(connection, query: str):
             cursor.execute(query)
             connection.commit()
             cursor.close()
+            file_name = 'sql_insercao_dados.sql'
+            write_in_file(file_name, query)
             return True
         except:
             connection.rollback()
             cursor.close()
             return False
     return False
+
+
+def write_in_file(file_name: str, content: str):
+	with open(file_name, 'a') as file:
+		file.write(content + '\n')
+		file.close()
 
 
 def generate_data(field: str, connection = None):
