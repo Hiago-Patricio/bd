@@ -70,20 +70,14 @@ CREATE OR REPLACE FUNCTION desconto_25_a_cada_10_compras_FUNC()
 RETURNS TRIGGER AS $BODY$
 DECLARE 
 	quantidade_compras INTEGER;
-    clienteId INTEGER;
 BEGIN
-    SELECT Cl.clienteId
-    INTO clienteId
+    SELECT Cl.quantidadeCompras
+    INTO quantidade_compras
     FROM Cliente Cl
     JOIN Compra C
-    ON C.fkClienteId = Cl.clienteId 
+    ON Cl.clienteId = C.fkClienteId
     WHERE NEW.fkCompraId = C.compraId;
 
-	SELECT COUNT(*)
-	INTO quantidade_compras
-	FROM Compra C
-    WHERE clienteID = C.fkClienteId;   
-        
 	IF quantidade_compras > 0 AND quantidade_compras % 10 = 0 THEN
         NEW.descontoUnidade = NEW.descontoUnidade + NEW.precoUnidade * 0.25;
     END IF;
@@ -197,7 +191,6 @@ CREATE TRIGGER g_atualiza_quantidade_de_compras_TG
 AFTER INSERT ON Compra
 FOR EACH ROW 
 EXECUTE PROCEDURE atualiza_quantidade_de_compras_FUNC();
-
 
 -- Depois de 100 compras o cliente vira vip
 -- Oitavo

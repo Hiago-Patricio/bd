@@ -91,7 +91,7 @@ CREATE TABLE Funcionario (
 
 CREATE TABLE Cliente (
     clienteId SERIAL PRIMARY KEY,
-    quantidadeCompras INTEGER NOT NULL,
+    quantidadeCompras INTEGER NOT NULL DEFAULT 0,
     endereco VARCHAR(255) NOT NULL,
     sexo VARCHAR(255) NOT NULL,
     nome VARCHAR(255) NOT NULL,

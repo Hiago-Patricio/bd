@@ -15,7 +15,12 @@ def validate_info(field_list: list):
             return False
         
         data_type = field_info[1]
-        if not(data_type in data_types_with_2_args) and not(data_type in data_types_with_4_args):
+        invalid_cond = [
+            not(data_type in data_types_with_2_args),
+            not(data_type in data_types_with_3_args),
+            not(data_type in data_types_with_4_args)
+        ]
+        if all(invalid_cond):
             return False
 
         if len(field_info) == 2 or len(field_info) == 4:
@@ -156,7 +161,12 @@ def random_info_csv(name_csv_file: str):
         return content[random.randrange(0, len(content))]
 
 
-def run_in_sequence(field_dic_list: dict, rows_list: list):
+def serial(field: str):
+    last_to_insert = field.split('-')[2]
+    return int(last_to_insert)
+
+
+def run_in_sequence(field_dic_list: dict, rows_list: list, connection):
     for dict_item, rows in zip(field_dict_list_to_run_in_sequence.items(), rows_list):
         table_name, field_list = dict_item
         x = []
@@ -178,26 +188,42 @@ def run_in_sequence(field_dic_list: dict, rows_list: list):
         print('{} linhas inseridas na tabela {}.'.format(inserted_rows, table_name))
 
 
-def run_intervaled(field_dict_list: dict, rows_list: list):
+def run_intervaled(field_dict_list: dict, rows_list: list, connection):
     max_row_value = max(rows_list)
+
+    serial_value_list = []
+    for dict_item in field_dict_list.items():
+        field_list = dict_item[1]
+        for field in field_list:
+            if field.split('-')[1] == 'SERIAL':
+                serial_value_list.append(1)
+                
+
     for i in range(max_row_value):
+        index = 0
         for dict_item, rows in zip(field_dict_list.items(), rows_list):
             table_name, field_list = dict_item
-            x = []
             field_name_list = []
-            for field in field_list:
-                field_name_list.append(field.split('-')[0]) 
-
             field_data_list = []
             for field in field_list:
-                field_data_list.append(generate_data(field, connection)) 
-
+                name = field.split('-')[0]
+                field_name_list.append(name)
+                data_type = field.split('-')[1]
+                if data_type == 'SERIAL':
+                    data = serial_value_list[index]
+                    serial_value_list[index] += 1
+                    index += 1
+                else:
+                    data = generate_data(field, connection)
+                field_data_list.append(data)
+            
             if rows > 0:
                 query = create_insert_query(table_name, field_name_list, field_data_list)
                 if not execute_query(connection, query):
                     print('Query falha: ', query)
         for i, j in zip(range(len(rows_list)), rows_list):
             rows_list[i] -= 1
+
 
 user:str = 'postgres'
 password:str = '123'
@@ -208,6 +234,7 @@ connection = db.connect(user=user, password=password, host=host, port=port, data
 
 '''
 Input with 2 args: fieldName-DATA_TYPE
+Input with 3 args: fieldName-DATA_TYPE-last_number_to_insert
 Input with 4 args: fieldName-DATA_TYPE-TableName-fieldName
 '''
 archives_csv = [
@@ -224,18 +251,19 @@ archives_csv = [
     'TipoMidia_nome'
 ]
 data_types_with_2_args = [
-    'ADDRESS', 
-    'BOOLEAN', 
-    'DATE', 
-    'FALSE', 
+    'ADDRESS',
+    'BOOLEAN',
+    'DATE',
+    'FALSE',
     'FK',
-    'FLOAT', 
-    'INTEGER', 
-    'NAME', 
-    'SEX', 
-    'TEXT', 
+    'FLOAT',
+    'INTEGER',
+    'NAME',
+    'SEX',
+    'TEXT',
     'TRUE'
     ] + archives_csv
+data_types_with_3_args = ['SERIAL']
 data_types_with_4_args = ['FK']
 
 field_dict_list_to_run_in_sequence = {}
@@ -250,14 +278,14 @@ field_dict_list_to_run_in_sequence[table_name] = [
     'nome-Genero_nome',
     'localizacao-Genero_localizacao'
 ]
-rows_list_to_run_in_sequence.append(10)
+rows_list_to_run_in_sequence.append(1)
 
 table_name = 'TipoMidia'
 table_name_list.append(table_name)
 field_dict_list_to_run_in_sequence[table_name] = [
     'nome-Midia_nome'
 ]
-rows_list_to_run_in_sequence.append(10)
+rows_list_to_run_in_sequence.append(1)
 
 
 table_name = 'Midia'
@@ -272,7 +300,7 @@ field_dict_list_to_run_in_sequence[table_name] = [
     'localPublicacao-Midia_nacionalidade',
     'precoMidia-FLOAT'
 ]
-rows_list_to_run_in_sequence.append(10)
+rows_list_to_run_in_sequence.append(20)
 
 table_name = 'Livro'
 table_name_list.append(table_name)
@@ -282,7 +310,7 @@ field_dict_list_to_run_in_sequence[table_name] = [
     'edicao-INTEGER',
     'paginas-INTEGER'
 ]
-rows_list_to_run_in_sequence.append(10)
+rows_list_to_run_in_sequence.append(1)
 
 table_name = 'Manga'
 table_name_list.append(table_name)
@@ -291,7 +319,7 @@ field_dict_list_to_run_in_sequence[table_name] = [
     'adaptacaoAnime-BOOLEAN',
     'finalizado-BOOLEAN'
 ]
-rows_list_to_run_in_sequence.append(10)
+rows_list_to_run_in_sequence.append(1)
 
 table_name = 'Volume'
 table_name_list.append(table_name)
@@ -302,7 +330,7 @@ field_dict_list_to_run_in_sequence[table_name] = [
     'numero-FLOAT',
     'quantidadeCapitulos-INTEGER'
 ]
-rows_list_to_run_in_sequence.append(10)
+rows_list_to_run_in_sequence.append(1)
 
 table_name = 'Revista'
 table_name_list.append(table_name)
@@ -311,7 +339,7 @@ field_dict_list_to_run_in_sequence[table_name] = [
     'empresa-Revista_empresa',
     'edicao-INTEGER'
 ]
-rows_list_to_run_in_sequence.append(10)
+rows_list_to_run_in_sequence.append(1)
 
 table_name = 'Autor'
 table_name_list.append(table_name)
@@ -321,7 +349,7 @@ field_dict_list_to_run_in_sequence[table_name] = [
     'dataNascimento-DATE',
     'dataFalecimento-DATE'
 ]
-rows_list_to_run_in_sequence.append(10)
+rows_list_to_run_in_sequence.append(1)
 
 table_name = 'AutorMidia'
 table_name_list.append(table_name)
@@ -329,7 +357,7 @@ field_dict_list_to_run_in_sequence[table_name] = [
     'fkAutorId-FK-Autor-autorId',
     'fkMidiaId-FK-Midia-midiaId'
 ]
-rows_list_to_run_in_sequence.append(10)
+rows_list_to_run_in_sequence.append(1)
 
 table_name = 'Funcionario'
 table_name_list.append(table_name)
@@ -339,18 +367,17 @@ field_dict_list_to_run_in_sequence[table_name] = [
     'salario-FLOAT',
     'dataAdmissao-DATE'
 ]
-rows_list_to_run_in_sequence.append(10)
+rows_list_to_run_in_sequence.append(1)
 
 table_name = 'Cliente'
 table_name_list.append(table_name)
 field_dict_list_to_run_in_sequence[table_name] = [
-    'quantidadeCompras-INTEGER',
     'endereco-ADDRESS',
     'sexo-SEX',
     'nome-NAME',
     'dataNascimento-DATE'
 ]
-rows_list_to_run_in_sequence.append(10)
+rows_list_to_run_in_sequence.append(1)
 
 table_name = 'Compra'
 table_name_list.append(table_name)
@@ -359,16 +386,17 @@ field_dict_list_to_run_intervaled[table_name] = [
     'fkFuncionarioId-FK-Funcionario-funcionarioId',
     'data-DATE'
 ]
-rows_list_to_run_intervaled.append(1)
+rows_list_to_run_intervaled.append(20)
 
 table_name = 'ProdutosComprados'
 table_name_list.append(table_name)
 field_dict_list_to_run_intervaled[table_name] = [
     'fkCompraId-FK-Compra-compraId',
-    'fkMidiaId-FK-Midia-midiaId',
+    # 'fkMidiaId-FK-Midia-midiaId',
+    'fkMidiaId-SERIAL',
     'quantidade-INTEGER'
 ]
-rows_list_to_run_intervaled.append(1)
+rows_list_to_run_intervaled.append(20)
 
 for table_name, field_list in list(field_dict_list_to_run_in_sequence.items()) + list(field_dict_list_to_run_intervaled.items()):
     stop = False
@@ -380,5 +408,5 @@ if stop:
     print('Nenhum dado foi inserido.')
     sys.exit()
 
-run_in_sequence(field_dict_list_to_run_in_sequence, rows_list_to_run_in_sequence)
-run_intervaled(field_dict_list_to_run_intervaled, rows_list_to_run_intervaled)
+run_in_sequence(field_dict_list_to_run_in_sequence, rows_list_to_run_in_sequence, connection)
+run_intervaled(field_dict_list_to_run_intervaled, rows_list_to_run_intervaled, connection)
