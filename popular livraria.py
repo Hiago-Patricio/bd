@@ -84,7 +84,7 @@ def create_insert_query(table_name: str, field_name_list: list, field_data_list:
     return query
 
 
-def insert_data_in_table(connection, query: str):
+def execute_query(connection, query: str):
     if connection:
         try:
             cursor = connection.cursor()
@@ -178,13 +178,13 @@ field_dict_list[table_name] = [
     'nome-NAME',
     'localizacao-ADDRESS'
 ]
-rows_list.append(1)
+rows_list.append(0)
 
 table_name = 'Midia'
 table_name_list.append(table_name)
 field_dict_list[table_name] = [
     'fkGeneroId-FK-Genero-generoId',
-    'tipo-MIDIA',
+    'fkTipoMidiaId-FK-TipoMidia-tipoMidiaId',
     'dataPublicacao-DATE',
     'editora-NAME',
     'nome-NAME',
@@ -192,7 +192,7 @@ field_dict_list[table_name] = [
     'localPublicacao-ADDRESS',
     'precoMidia-FLOAT'
 ]
-rows_list.append(1)
+rows_list.append(0)
 
 table_name = 'Livro'
 table_name_list.append(table_name)
@@ -202,7 +202,7 @@ field_dict_list[table_name] = [
     'edicao-INTEGER',
     'paginas-INTEGER'
 ]
-rows_list.append(1)
+rows_list.append(0)
 
 table_name = 'Manga'
 table_name_list.append(table_name)
@@ -211,7 +211,7 @@ field_dict_list[table_name] = [
     'adaptacaoAnime-BOOLEAN',
     'finalizado-TRUE'
 ]
-rows_list.append(1)
+rows_list.append(0)
 
 table_name = 'Volume'
 table_name_list.append(table_name)
@@ -222,7 +222,7 @@ field_dict_list[table_name] = [
     'numero-FLOAT',
     'quantidadeCapitulos-INTEGER'
 ]
-rows_list.append(1)
+rows_list.append(0)
 
 table_name = 'Revista'
 table_name_list.append(table_name)
@@ -231,7 +231,7 @@ field_dict_list[table_name] = [
     'empresa-NAME',
     'edicao-INTEGER'
 ]
-rows_list.append(1)
+rows_list.append(0)
 
 table_name = 'Autor'
 table_name_list.append(table_name)
@@ -241,7 +241,7 @@ field_dict_list[table_name] = [
     'dataNascimento-DATE',
     'dataFalecimento-DATE'
 ]
-rows_list.append(1)
+rows_list.append(0)
 
 table_name = 'AutorMidia'
 table_name_list.append(table_name)
@@ -249,7 +249,7 @@ field_dict_list[table_name] = [
     'fkAutorId-FK-Autor-autorId',
     'fkMidiaId-FK-Midia-midiaId'
 ]
-rows_list.append(1)
+rows_list.append(0)
 
 table_name = 'Funcionario'
 table_name_list.append(table_name)
@@ -259,7 +259,7 @@ field_dict_list[table_name] = [
     'salario-FLOAT',
     'dataAdmissao-DATE'
 ]
-rows_list.append(5)
+rows_list.append(0)
 
 table_name = 'Cliente'
 table_name_list.append(table_name)
@@ -270,7 +270,7 @@ field_dict_list[table_name] = [
     'nome-NAME',
     'dataNascimento-DATE'
 ]
-rows_list.append(1)
+rows_list.append(0)
 
 table_name = 'Compra'
 table_name_list.append(table_name)
@@ -279,7 +279,7 @@ field_dict_list[table_name] = [
     'fkFuncionarioId-FK-Funcionario-funcionarioId',
     'data-DATE'
 ]
-rows_list.append(10)
+rows_list.append(1)
 
 table_name = 'ProdutosComprados'
 table_name_list.append(table_name)
@@ -288,8 +288,7 @@ field_dict_list[table_name] = [
     'fkMidiaId-FK-Midia-midiaId',
     'quantidade-INTEGER'
 ]
-rows_list.append(1)
-
+rows_list.append(100)
 
 for table_name, field_list in field_dict_list.items():
     stop = False
@@ -301,14 +300,26 @@ for table_name, field_list in field_dict_list.items():
 if stop:
     sys.exit()
 
+execute_query(connection,
+'''
+insert into TipoMidia(nome)
+VALUES ('Livro');
+insert into TipoMidia(nome)
+VALUES ('Revista');
+insert into TipoMidia(nome)
+VALUES ('Volume');
+'''
+)
+
+
 
 for dict_item, rows in zip(field_dict_list.items(), rows_list):
     table_name, field_list = dict_item
     if table_name == 'ProdutosComprados':
-        insert_data_in_table(connection, 
+        execute_query(connection, 
         '''
         UPDATE Midia
-        SET tipo = 'Volume';
+        SET fkTipoMidiaId = 3;
         ''')
     
     x = []
@@ -323,7 +334,7 @@ for dict_item, rows in zip(field_dict_list.items(), rows_list):
             field_data_list.append(generate_data(field, connection)) 
 
         query = create_insert_query(table_name, field_name_list, field_data_list)
-        if insert_data_in_table(connection, query):
+        if execute_query(connection, query):
             inserted_rows += 1
         else:
             print(query)
