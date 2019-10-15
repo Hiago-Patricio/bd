@@ -147,8 +147,6 @@ BEGIN
                 ProdutosComprados.fkMidiaId = Volume.fkMidiaId;
 		END IF;
     END IF;
-    INSERT INTO Debug(finalizado, existente, comprado, is_volume)
-    VALUES (finalizado, quantidade_volumes_existentes, quantidade_volumes_comprados, 0);
 	RETURN NEW;
 END;
 $BODY$ LANGUAGE plpgsql;
