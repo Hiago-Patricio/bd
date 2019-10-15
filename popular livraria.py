@@ -300,7 +300,7 @@ field_dict_list_to_run_in_sequence[table_name] = [
     'localPublicacao-Midia_nacionalidade',
     'precoMidia-FLOAT'
 ]
-rows_list_to_run_in_sequence.append(20)
+rows_list_to_run_in_sequence.append(100)
 
 table_name = 'Livro'
 table_name_list.append(table_name)
@@ -386,7 +386,7 @@ field_dict_list_to_run_intervaled[table_name] = [
     'fkFuncionarioId-FK-Funcionario-funcionarioId',
     'data-DATE'
 ]
-rows_list_to_run_intervaled.append(20)
+rows_list_to_run_intervaled.append(100)
 
 table_name = 'ProdutosComprados'
 table_name_list.append(table_name)
@@ -396,7 +396,7 @@ field_dict_list_to_run_intervaled[table_name] = [
     'fkMidiaId-SERIAL',
     'quantidade-INTEGER'
 ]
-rows_list_to_run_intervaled.append(20)
+rows_list_to_run_intervaled.append(100)
 
 for table_name, field_list in list(field_dict_list_to_run_in_sequence.items()) + list(field_dict_list_to_run_intervaled.items()):
     stop = False
