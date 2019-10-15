@@ -1,56 +1,50 @@
 	--Mostra lista de clientes
-
 SELECT clienteId, nome, quantidadeCompras, endereco, sexo, dataNascimento, vip
 FROM Cliente
 ORDER BY clienteId;
 
-	--Seleciona vip's
+	--Seleciona clientes
+CREATE VIEW cliente_view AS
+SELECT clienteid, nome, quantidadeCompras, vip, sexo, endereco, dataNascimento
+FROM cliente
 
-SELECT clienteid, nome, vip FROM cliente
-WHERE vip = TRUE;
+	--Seleciona Compra
+CREATE VIEW compra_view AS
+SELECT compraId, data, preco, fkClienteId, fkFuncionarioId
+FROM Compra
 
-	--Histórico de gasto do cliente
+	--Seleciona ProdutosComprados
+CREATE VIEW produtosComprados_view AS
+SELECT produtosCompradosId, fkCompraId, fkMidiaId, quantidade, precoUnidade, descontoUnidade
+FROM ProdutosComprados
 
-SELECT c.clienteId, c.nome, co.data, co.preco
-FROM Cliente c, Compra co
-WHERE c.clienteId = co.fkClienteId
-ORDER BY c.clienteId;
-
-	--Histórico de compra do cliente
-
-SELECT c.clienteId, c.nome, co.compraId, pc.quantidade, m.nome, m.tipo
-FROM Cliente c, Compra co, ProdutosComprados pc, Midia m
-WHERE c.clienteId = co.fkClienteId
-AND co.compraId = pc.fkCompraId
-AND pc.fkMidiaId = m.midiaId
-ORDER BY c.clienteId;
-
-	--Midias Disponiveis na livraria por tipo
-
-SELECT m.tipo, m.midiaId, m.nome, m.dataPublicacao, m.idioma, m.localPublicacao, m.editora, m.precoMidia
-FROM Midia m
+	--Seleciona Midias
+CREATE VIEW midia_view AS
+SELECT tm.nome, m.midiaId, fkGeneroId, m.nome, m.dataPublicacao, m.idioma, m.localPublicacao, m.editora, m.precoMidia
+FROM Midia m, TipoMidia tm
+WHERE m.fkTipoMidiaId = tm.tipoMidiaId
 ORDER BY m.tipo;
 
-	--Midias disponiveis na livraria por genero
+	-- Midia com tipo ARRUMAR ARRUMAR ARRUMAR ARRUMAR ARRUMAR
+CREATE VIEW tipo_view AS
+SELECT 
 
-SELECT g.nome, m.midiaId, m.nome, m.dataPublicacao, m.tipo, m.idioma, m.localPublicacao, m.editora, m.precoMidia
-FROM Midia m, Genero g
-WHERE g.generoId = m.fkGeneroId
-ORDER BY g.nome;
 
-	--Autores e suas obras disponiveis na livraria
+	--Seleciona genero
+CREATE VIEW genero_view AS
+SELECT generoId, nome, localizacao
+FROM Genero 
 
-SELECT  a.nome, a.autorId, a.nacionalidade, a.dataNascimento, a.dataFalecimento, m.tipo, m.nome, m.dataPublicacao, m.precoMidia
-FROM Autor a, AutorMidia am, Midia m
+	--SelecionaAutores e suas obras disponiveis na livraria
+CREATE VIEW autor_view AS
+SELECT  a.autorId, a.nome, a.nacionalidade, a.dataNascimento, a.dataFalecimento, am.fkMidiaId
+FROM Autor a, AutorMidia am
 WHERE a.autorId = am.fkAutorId
-AND am.fkMidiaId = m.midiaId
 ORDER BY a.nome;
 
-	--Funcionarios e suas vendas
-SELECT f.funcionarioId, f.nome, f.funcao, co.fkClienteId, c.nome, co.compraId, co.data, co.compraId
-FROM Funcionario f, Compra co, Cliente c
-WHERE f.funcionarioId = co.fkFuncionarioId
-AND co.fkClienteId = c.clienteId
-ORDER BY f.funcionarioId;
+	--Seleciona Funcionarios
+CREATE VIEW funcionario_view AS
+SELECT funcionarioId, nome, funcao, salario, dataAdmissao
+FROM Funcionario
 
 
