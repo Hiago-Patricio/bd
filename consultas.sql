@@ -20,7 +20,7 @@ FROM ProdutosComprados;
 
 	--Seleciona Midias
 CREATE VIEW midia_view AS
-SELECT tm.nome, m.midiaId, fkGeneroId, m.nome, m.dataPublicacao, m.idioma, m.localPublicacao, m.editora, m.precoMidia
+SELECT tm.nome nomeTipo, m.midiaId, fkGeneroId, m.nome nomeMidia, m.dataPublicacao, m.idioma, m.localPublicacao, m.editora, m.precoMidia
 FROM Midia m, TipoMidia tm
 WHERE m.fkTipoMidiaId = tm.tipoMidiaId
 ORDER BY tm.nome;
@@ -65,11 +65,11 @@ FROM Funcionario;
 
 
 	--Seleciona cliente e suas compras
-SELECT cv.nome, cov.data, cov.preco, fv.nome, mv.m.nome, gv.nome, mv.tm.nome, pcv.precoUnidade, pcv.quantidade
+SELECT cv.nome, cov.data, cov.preco, fv.nome, mv.nomeMidia, gv.nome, mv.nomeTipo, pcv.precoUnidade, pcv.quantidade
 FROM cliente_view cv
 LEFT OUTER JOIN compra_view cov ON cv.clienteId = cov.fkClienteId
 LEFT OUTER JOIN produtosComprados_view pcv ON pcv.fkCompraId = cov.compraId
-LEFT OUTER JOIN funcionario_view fv ON co.fkFuncionarioId = f.funcionarioId
+LEFT OUTER JOIN funcionario_view fv ON cov.fkFuncionarioId = fv.funcionarioId
 LEFT OUTER JOIN midia_view mv ON mv.midiaId = pcv.fkMidiaId
 LEFT OUTER JOIN genero_view gv ON gv.generoId = mv.fkGeneroId
 ORDER BY cv.nome;
