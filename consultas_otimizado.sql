@@ -15,6 +15,22 @@ WHERE m.fkTipoMidiaId = tm.tipoMidiaId
 AND g.generoId = m.fkGeneroId
 ORDER BY nomeMidia;
 
+  --Seleciona funcionarios e suas vendas
+CREATE VIEW venda_funcionario_view AS
+SELECT f.nome, co.data, pc.quantidade, pc.fkMidiaId
+FROM Funcionario f
+WHERE f.funcionarioId = co.fkFuncionarioId
+AND co.compraId = pc.fkCompraId
+ORDER BY f.nome;
+
+  --Seleciona autores e suas midias e o tipo da midia
+CREATE VIEW autor_midia_view AS
+SELECT a.nome, mv.nomeMidia, mv.nomeTipo, mv.nomeGenero, mv.midiaId
+FROM Autor a, AutorMidia am
+INNER JOIN AutorMidia am ON a.autorId = am.fkAutorId
+INNER JOIN midia_otimizada_view mv ON mv.midiaId = am.fkMidiaId
+ORDER BY a.nome;
+
 
   --Relatorio dos produtos comprados pelos clientes
 CREATE VIEW relatorio_view AS
@@ -24,4 +40,13 @@ FROM ProdutosComprados pc
 LEFT OUTER JOIN compra_otimizada_view cv ON pc.fkCompraId = cv.compraId
 LEFT OUTER JOIN midia_otimizada_view mv ON pc.fkMidiaId = mv.midiaId
 ORDER BY cv.nomeCliente;
+
+  --Relatorio de autores que tiveram suas midias vendidas e por quais funcionarios
+CREATE VIEW relatorio2_view AS
+SELECT amv.nome nomeAutor, amv.nomeMidia, amv.nomeTipo, amv.nomeGenero, 
+vfv.nome nomeFuncionario, vfv.data, vfv.quantidade
+FROM autor_midia_view amv
+INNER JOIN venda_funcionario_view vfv ON amv.midiaId = vfv.fkMidiaId
+ORDER BY nomeAutor;
+
 
