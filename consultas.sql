@@ -1,7 +1,3 @@
-	--Mostra lista de clientes
-SELECT clienteId, nome, quantidadeCompras, endereco, sexo, dataNascimento, vip
-FROM Cliente
-ORDER BY clienteId;
 
 	--Seleciona clientes
 CREATE VIEW cliente_view AS
