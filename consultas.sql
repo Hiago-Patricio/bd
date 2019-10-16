@@ -72,8 +72,9 @@ ORDER BY cv.nome;
 
 	--Quais autores tiveram midias vendidos por quais funcionarios - relatorio 2
 SELECT av.nome, mv.nomeMidia, mv.nomeTipo, fv.nome, cov.data, pcv.quantidade
-FROM funcionario_view fv, midia_view mv
+FROM funcionario_view fv
 INNER JOIN compra_view cov ON fv.funcionarioId = cov.fkFuncionarioId
-INNER JOIN produtosComprados_view pcv ON pcv.fkMidiaId = mv.midiaId
+INNER JOIN produtosComprados_view pcv ON pcv.fkCompraId = cov.compraId
+INNER JOIN midia_view mv ON pcv.fkMidiaId = mv.midiaId
 INNER JOIN autor_view av ON av.fkMidiaId = mv.midiaId
 ORDER BY av.nome;
