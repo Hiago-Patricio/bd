@@ -23,7 +23,12 @@ def validate_info(field_list: list):
         if all(invalid_cond):
             return False
 
-        if len(field_info) == 2 or len(field_info) == 4:
+        valid_sizes = [
+            len(field_info) == 2,
+            len(field_info) == 3,
+            len(field_info) == 4
+            ]
+        if any(valid_sizes):
             valid_list_field.append(field_info)
         else:
             return False
@@ -92,6 +97,7 @@ def generate_data(field: str, connection = None):
     data_type = field.split('-')[1]
     data_type_no_exist = [
         not(data_type in data_types_with_2_args),
+        not(data_type in data_types_with_3_args),
         not(data_type in data_types_with_4_args)
     ]
     if all(data_type_no_exist):
@@ -110,9 +116,12 @@ def generate_data(field: str, connection = None):
         field_name = field.split('-')[3]
         return random_fk(connection, table_name, field_name)
     elif data_type == 'FLOAT':
-        return random.uniform(20, 100)
+        return round(random.uniform(20, 100), 2)
     elif data_type == 'INTEGER':
         return random.randrange(1, 100)
+    elif data_type == 'MIDIA':
+        tipoMidiaNome = field.split('-')[2]
+        return random_fk_midia(connection, tipoMidiaNome)
     elif data_type == 'NAME':
         return faker.Faker().name()
     elif data_type == 'SEX':
@@ -147,7 +156,32 @@ def random_date():
 
 def random_fk(connection, table_name: str, field_name: str):
     try:
-        query = "SELECT {} FROM {} ORDER BY RANDOM() LIMIT 1;".format(field_name, table_name)
+        query = '''
+        SELECT {} 
+        FROM {} 
+        ORDER BY RANDOM() 
+        LIMIT 1;
+        '''.format(field_name, table_name)
+        cursor = connection.cursor()
+        cursor.execute(query)
+        info = cursor.fetchone()[0]
+        cursor.close()
+        return int(info)
+    except:
+        return None
+
+
+def random_fk_midia(connection, tipoMidiaNome: str):
+    try:
+        query = '''
+        SELECT M.midiaID 
+        FROM Midia M
+        JOIN TipoMidia TM
+        ON M.fkTipoMidiaId = TM.tipoMidiaId
+        WHERE TM.nome = '{}'
+        ORDER BY RANDOM() 
+        LIMIT 1;
+        '''.format(tipoMidiaNome)
         cursor = connection.cursor()
         cursor.execute(query)
         info = cursor.fetchone()[0]
@@ -177,16 +211,27 @@ def serial(field: str):
 def run_in_sequence(field_dic_list: dict, rows_list: list, connection):
     for dict_item, rows in zip(field_dict_list_to_run_in_sequence.items(), rows_list):
         table_name, field_list = dict_item
-        x = []
         field_name_list = []
+        serial_value_list = []
         for field in field_list:
-            field_name_list.append(field.split('-')[0]) 
+            name = field.split('-')[0]
+            field_name_list.append(name)
+            if field.split('-')[1] == 'SERIAL':
+                serial_value_list.append(1)
 
         inserted_rows = 0
         for i in range(rows):
             field_data_list = []
+            index = 0
             for field in field_list:
-                field_data_list.append(generate_data(field, connection)) 
+                data_type = field.split('-')[1]
+                if data_type == 'SERIAL':
+                    data = serial_value_list[index]
+                    serial_value_list[index] += 1
+                    index += 1
+                else:
+                    data = generate_data(field, connection)
+                field_data_list.append(data) 
 
             query = create_insert_query(table_name, field_name_list, field_data_list)
             if execute_query(connection, query):
@@ -197,41 +242,43 @@ def run_in_sequence(field_dic_list: dict, rows_list: list, connection):
 
 
 def run_intervaled(field_dict_list: dict, rows_list: list, connection):
-    max_row_value = max(rows_list)
+    try:
+        max_row_value = max(rows_list)
 
-    serial_value_list = []
-    for dict_item in field_dict_list.items():
-        field_list = dict_item[1]
-        for field in field_list:
-            if field.split('-')[1] == 'SERIAL':
-                serial_value_list.append(1)
-                
-
-    for i in range(max_row_value):
-        index = 0
-        for dict_item, rows in zip(field_dict_list.items(), rows_list):
-            table_name, field_list = dict_item
-            field_name_list = []
-            field_data_list = []
+        serial_value_list = []
+        for dict_item in field_dict_list.items():
+            field_list = dict_item[1]
             for field in field_list:
-                name = field.split('-')[0]
-                field_name_list.append(name)
-                data_type = field.split('-')[1]
-                if data_type == 'SERIAL':
-                    data = serial_value_list[index]
-                    serial_value_list[index] += 1
-                    index += 1
-                else:
-                    data = generate_data(field, connection)
-                field_data_list.append(data)
-            
-            if rows > 0:
-                query = create_insert_query(table_name, field_name_list, field_data_list)
-                if not execute_query(connection, query):
-                    print('Query falha: ', query)
-        for i, j in zip(range(len(rows_list)), rows_list):
-            rows_list[i] -= 1
+                if field.split('-')[1] == 'SERIAL':
+                    serial_value_list.append(1)
+                    
 
+        for i in range(max_row_value):
+            index = 0
+            for dict_item, rows in zip(field_dict_list.items(), rows_list):
+                table_name, field_list = dict_item
+                field_name_list = []
+                field_data_list = []
+                for field in field_list:
+                    name = field.split('-')[0]
+                    field_name_list.append(name)
+                    data_type = field.split('-')[1]
+                    if data_type == 'SERIAL':
+                        data = serial_value_list[index]
+                        serial_value_list[index] += 1
+                        index += 1
+                    else:
+                        data = generate_data(field, connection)
+                    field_data_list.append(data)
+                
+                if rows > 0:
+                    query = create_insert_query(table_name, field_name_list, field_data_list)
+                    if not execute_query(connection, query):
+                        print('Query falha: ', query)
+            for i, j in zip(range(len(rows_list)), rows_list):
+                rows_list[i] -= 1
+    except:
+        pass
 
 user:str = 'postgres'
 password:str = '123'
@@ -271,8 +318,9 @@ data_types_with_2_args = [
     'TEXT',
     'TRUE'
     ] + archives_csv
-data_types_with_3_args = ['SERIAL']
+data_types_with_3_args = ['SERIAL', 'MIDIA']
 data_types_with_4_args = ['FK']
+
 
 field_dict_list_to_run_in_sequence = {}
 field_dict_list_to_run_intervaled = {}
@@ -283,22 +331,25 @@ rows_list_to_run_intervaled = []
 table_name = 'Genero'
 table_name_list.append(table_name)
 field_dict_list_to_run_in_sequence[table_name] = [
+    'generoId-SERIAL-1',
     'nome-Genero_nome',
     'localizacao-Genero_localizacao'
 ]
-rows_list_to_run_in_sequence.append(1)
+rows_list_to_run_in_sequence.append(10)
 
 table_name = 'TipoMidia'
 table_name_list.append(table_name)
 field_dict_list_to_run_in_sequence[table_name] = [
-    'nome-Midia_nome'
+    'tipoMidiaId-SERIAL-1',
+    'nome-TipoMidia_nome'
 ]
-rows_list_to_run_in_sequence.append(1)
+rows_list_to_run_in_sequence.append(100)
 
 
 table_name = 'Midia'
 table_name_list.append(table_name)
 field_dict_list_to_run_in_sequence[table_name] = [
+    'MidiaId-SERIAL-1',
     'fkGeneroId-FK-Genero-generoId',
     'fkTipoMidiaId-FK-TipoMidia-tipoMidiaId',
     'dataPublicacao-DATE',
@@ -308,108 +359,118 @@ field_dict_list_to_run_in_sequence[table_name] = [
     'localPublicacao-Midia_nacionalidade',
     'precoMidia-FLOAT'
 ]
-rows_list_to_run_in_sequence.append(100)
+rows_list_to_run_in_sequence.append(30)
 
 table_name = 'Livro'
 table_name_list.append(table_name)
 field_dict_list_to_run_in_sequence[table_name] = [
-    'fkMidiaId-FK-Midia-midiaId',
+    'LivroId-SERIAL-1',
+    'fkMidiaId-MIDIA-Livro',
     'sinopse-TEXT',
     'edicao-INTEGER',
     'paginas-INTEGER'
 ]
-rows_list_to_run_in_sequence.append(1)
+rows_list_to_run_in_sequence.append(100)
 
 table_name = 'Manga'
 table_name_list.append(table_name)
 field_dict_list_to_run_in_sequence[table_name] = [
+    'MangaId-SERIAL-1',
     'nome-Manga_nome',
     'adaptacaoAnime-BOOLEAN',
     'finalizado-BOOLEAN'
 ]
-rows_list_to_run_in_sequence.append(1)
+rows_list_to_run_in_sequence.append(5)
 
 table_name = 'Volume'
 table_name_list.append(table_name)
 field_dict_list_to_run_in_sequence[table_name] = [
-    'fkMidiaId-FK-Midia-midiaId',
-    'fkMangaId-FK-Manga-mangaId',
+    'VolumeId-SERIAL-1',
+    'fkMidiaId-MIDIA-Volume',
+    'fkMangaId-FK-Manga-mangaID',
     'sinopse-TEXT',
     'numero-FLOAT',
     'quantidadeCapitulos-INTEGER'
 ]
-rows_list_to_run_in_sequence.append(1)
+rows_list_to_run_in_sequence.append(100)
 
 table_name = 'Revista'
 table_name_list.append(table_name)
 field_dict_list_to_run_in_sequence[table_name] = [
-    'fkMidiaId-FK-Midia-midiaId',
+    'RevistaId-SERIAL-1',
+    'fkMidiaId-MIDIA-Revista',
     'empresa-Revista_empresa',
     'edicao-INTEGER'
 ]
-rows_list_to_run_in_sequence.append(1)
+rows_list_to_run_in_sequence.append(100)
 
 table_name = 'Autor'
 table_name_list.append(table_name)
 field_dict_list_to_run_in_sequence[table_name] = [
+    'AutorId-SERIAL-1',
     'nacionalidade-Autor_nacionalidade',
     'nome-NAME',
     'dataNascimento-DATE',
     'dataFalecimento-DATE'
 ]
-rows_list_to_run_in_sequence.append(1)
+rows_list_to_run_in_sequence.append(100)
 
 table_name = 'AutorMidia'
 table_name_list.append(table_name)
 field_dict_list_to_run_in_sequence[table_name] = [
+    'AutorMidiaId-SERIAL-1',
     'fkAutorId-FK-Autor-autorId',
     'fkMidiaId-FK-Midia-midiaId'
 ]
-rows_list_to_run_in_sequence.append(1)
+rows_list_to_run_in_sequence.append(100)
 
 table_name = 'Funcionario'
 table_name_list.append(table_name)
 field_dict_list_to_run_in_sequence[table_name] = [
+    'FuncionarioId-SERIAL-1',
     'funcao-Funcionario_funcao',
     'nome-NAME',
     'salario-FLOAT',
     'dataAdmissao-DATE'
 ]
-rows_list_to_run_in_sequence.append(1)
+rows_list_to_run_in_sequence.append(5)
 
 table_name = 'Cliente'
 table_name_list.append(table_name)
 field_dict_list_to_run_in_sequence[table_name] = [
+    'ClienteId-SERIAL-1',
     'endereco-ADDRESS',
     'sexo-SEX',
     'nome-NAME',
     'dataNascimento-DATE'
 ]
-rows_list_to_run_in_sequence.append(1)
+rows_list_to_run_in_sequence.append(3)
 
 table_name = 'Compra'
 table_name_list.append(table_name)
 field_dict_list_to_run_intervaled[table_name] = [
+    'CompraId-SERIAL-1',
     'fkCLienteId-FK-Cliente-clienteId',
     'fkFuncionarioId-FK-Funcionario-funcionarioId',
     'data-DATE'
 ]
-rows_list_to_run_intervaled.append(100)
+rows_list_to_run_intervaled.append(600)
 
 table_name = 'ProdutosComprados'
 table_name_list.append(table_name)
 field_dict_list_to_run_intervaled[table_name] = [
+    'ProdutosCompradosId-SERIAL-1',
     'fkCompraId-FK-Compra-compraId',
     # 'fkMidiaId-FK-Midia-midiaId',
-    'fkMidiaId-SERIAL',
+    'fkMidiaId-SERIAL-1',
     'quantidade-INTEGER'
 ]
-rows_list_to_run_intervaled.append(100)
+rows_list_to_run_intervaled.append(1000)
 
 for table_name, field_list in list(field_dict_list_to_run_in_sequence.items()) + list(field_dict_list_to_run_intervaled.items()):
     stop = False
     if validate_info(field_list) == False:
-        print('Erro nos campos de ', table_name)
+        print('Erro nos campos de', table_name)
         stop = True
 
 if stop:

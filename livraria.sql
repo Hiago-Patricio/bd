@@ -20,7 +20,8 @@ CREATE TABLE Genero (
 
 CREATE TABLE TipoMidia(
     tipoMidiaId SERIAL PRIMARY KEY,
-    nome VARCHAR(255) NOT NULL
+    nome VARCHAR(255) NOT NULL,
+    UNIQUE (nome)
 );
 
 CREATE TABLE Midia (
@@ -41,7 +42,8 @@ CREATE TABLE Livro (
     fkMidiaId INTEGER REFERENCES Midia(midiaId) NOT NULL,
     sinopse VARCHAR(255) NOT NULL,
     edicao INTEGER NOT NULL CHECK(edicao > 0),
-    paginas INTEGER NOT NULL CHECK(paginas > 0)
+    paginas INTEGER NOT NULL CHECK(paginas > 0),
+    UNIQUE(fkMidiaId)
 );
 
 CREATE TABLE Manga (
@@ -57,14 +59,16 @@ CREATE TABLE Volume (
     fkMangaId INTEGER REFERENCES Manga(mangaId) NOT NULL,
     sinopse VARCHAR(255) NOT NULL,
     numero FLOAT NOT NULL CHECK(numero >= 0),
-    quantidadeCapitulos INTEGER NOT NULL CHECK(quantidadeCapitulos > 0)
+    quantidadeCapitulos INTEGER NOT NULL CHECK(quantidadeCapitulos > 0),
+    UNIQUE(fkMidiaId)
 );
 
 CREATE TABLE Revista (
     revistaId SERIAL PRIMARY KEY,
     fkMidiaId INTEGER REFERENCES Midia(midiaId) NOT NULL,
     empresa VARCHAR(255) NOT NULL,
-    edicao INTEGER NOT NULL CHECK(edicao > 0)
+    edicao INTEGER NOT NULL CHECK(edicao > 0),
+    UNIQUE(fkMidiaId)
 );
 
 CREATE TABLE Autor (
