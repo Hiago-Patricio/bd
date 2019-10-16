@@ -18,7 +18,7 @@ ORDER BY nomeMidia;
   --Seleciona funcionarios e suas vendas
 CREATE VIEW venda_funcionario_view AS
 SELECT f.nome, co.data, pc.quantidade, pc.fkMidiaId
-FROM Funcionario f
+FROM Funcionario f, Compra co, ProdutosComprados pc
 WHERE f.funcionarioId = co.fkFuncionarioId
 AND co.compraId = pc.fkCompraId
 ORDER BY f.nome;
@@ -26,7 +26,7 @@ ORDER BY f.nome;
   --Seleciona autores e suas midias e o tipo da midia
 CREATE VIEW autor_midia_view AS
 SELECT a.nome, mv.nomeMidia, mv.nomeTipo, mv.nomeGenero, mv.midiaId
-FROM Autor a, AutorMidia am
+FROM Autor a
 INNER JOIN AutorMidia am ON a.autorId = am.fkAutorId
 INNER JOIN midia_otimizada_view mv ON mv.midiaId = am.fkMidiaId
 ORDER BY a.nome;
