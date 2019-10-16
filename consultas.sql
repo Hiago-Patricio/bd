@@ -2,7 +2,7 @@
 	--Seleciona clientes
 CREATE VIEW cliente_view AS
 SELECT clienteId, nome, quantidadeCompras, vip, sexo, endereco, dataNascimento
-FROM cliente;
+FROM Cliente;
 
 	--Seleciona Compra
 CREATE VIEW compra_view AS
