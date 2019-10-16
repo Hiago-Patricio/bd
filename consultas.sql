@@ -64,9 +64,9 @@ FROM Funcionario;
 SELECT cv.nome, cov.data, cov.preco, fv.nome, mv.nomeMidia, gv.nome, mv.nomeTipo, pcv.precoUnidade, pcv.quantidade
 FROM cliente_view cv
 LEFT OUTER JOIN compra_view cov ON cv.clienteId = cov.fkClienteId
-LEFT OUTER JOIN produtosComprados_view pcv ON pcv.fkCompraId = cov.compraId
+LEFT OUTER JOIN produtosComprados_view pcv ON cov.compraId = pcv.fkCompraId
 LEFT OUTER JOIN funcionario_view fv ON cov.fkFuncionarioId = fv.funcionarioId
-LEFT OUTER JOIN midia_view mv ON mv.midiaId = pcv.fkMidiaId
-LEFT OUTER JOIN genero_view gv ON gv.generoId = mv.fkGeneroId
+LEFT OUTER JOIN midia_view mv ON pcv.fkMidiaId = mv.midiaId
+LEFT OUTER JOIN genero_view gv ON mv.fkGeneroId = gv.generoId
 ORDER BY cv.nome;
 
