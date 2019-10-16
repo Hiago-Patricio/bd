@@ -10,7 +10,7 @@ ORDER BY nomeCliente;
   --Seleciona midias_tipos_genero
 CREATE VIEW midia_otimizada_view AS
 SELECT m.nome as nomeMidia, m.midiaId midiaId, g.nome as nomeGenero, tm.nome nomeTipo
-FROM Midia m, Genero g
+FROM Midia m, Genero g, TipoMidia tm
 WHERE m.fkTipoMidiaId = tm.tipoMidiaId
 AND g.generoId = m.fkGeneroId
 ORDER BY nomeMidia;
