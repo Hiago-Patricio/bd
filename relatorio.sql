@@ -1,8 +1,0 @@
--- A partir de produto comprado
--- Nome do cliente
--- Data da compra
--- Preço dos produtos
--- Quem vendeu
--- Produtos comprados
--- Genero dos produtos
--- Tipo da midia
