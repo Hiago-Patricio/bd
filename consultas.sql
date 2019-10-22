@@ -61,6 +61,7 @@ FROM Funcionario;
 
 
 	--Seleciona cliente e suas compras - relatorio
+CREATE VIEW relatorio_cliente_view AS
 SELECT cv.nome, cov.data, cov.preco, fv.nome, mv.nomeMidia, gv.nome, mv.nomeTipo, pcv.precoUnidade, pcv.quantidade
 FROM cliente_view cv
 LEFT OUTER JOIN compra_view cov ON cv.clienteId = cov.fkClienteId
@@ -71,6 +72,7 @@ LEFT OUTER JOIN genero_view gv ON mv.fkGeneroId = gv.generoId
 ORDER BY cv.nome;
 
 	--Quais autores tiveram midias vendidos por quais funcionarios - relatorio 2
+CREATE VIEW relatorio_funcionario_view AS
 SELECT av.nome, mv.nomeMidia, mv.nomeTipo, fv.nome, cov.data, pcv.quantidade
 FROM funcionario_view fv
 INNER JOIN compra_view cov ON fv.funcionarioId = cov.fkFuncionarioId
