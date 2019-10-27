@@ -21,27 +21,6 @@ FROM Midia m, TipoMidia tm
 WHERE m.fkTipoMidiaId = tm.tipoMidiaId
 ORDER BY tm.nome;
 
-	-- Livro
-CREATE VIEW livro_view AS
-SELECT livroId, fkMidiaId, sinopse, edicao, paginas
-FROM Livro;
-
-	--Revista
-CREATE VIEW revista_view AS
-SELECT revistaId, fkMidiaId, empresa, edicao
-FROM Revista;
-	
-	--Manga
-CREATE VIEW manga_view AS
-SELECT mangaId, nome, adaptacaoAnime, finalizado
-FROM Manga;
-
-	--Volume do manga
-CREATE VIEW volume_view AS
-SELECT volumeId, fkMidiaId, fkMangaId, sinopse, numero, quantidadeCapitulos
-FROM Volume;
-
-
 	--Seleciona genero
 CREATE VIEW genero_view AS
 SELECT generoId, nome, localizacao
@@ -61,6 +40,7 @@ FROM Funcionario;
 
 
 	--Seleciona cliente e suas compras - relatorio
+CREATE MATERIALIZED VIEW relatorio_cliente_view AS
 SELECT cv.nome, cov.data, cov.preco, fv.nome, mv.nomeMidia, gv.nome, mv.nomeTipo, pcv.precoUnidade, pcv.quantidade
 FROM cliente_view cv
 LEFT OUTER JOIN compra_view cov ON cv.clienteId = cov.fkClienteId
@@ -71,6 +51,7 @@ LEFT OUTER JOIN genero_view gv ON mv.fkGeneroId = gv.generoId
 ORDER BY cv.nome;
 
 	--Quais autores tiveram midias vendidos por quais funcionarios - relatorio 2
+CREATE MATERIALIZED VIEW relatorio_funcionario_view AS
 SELECT av.nome, mv.nomeMidia, mv.nomeTipo, fv.nome, cov.data, pcv.quantidade
 FROM funcionario_view fv
 INNER JOIN compra_view cov ON fv.funcionarioId = cov.fkFuncionarioId
