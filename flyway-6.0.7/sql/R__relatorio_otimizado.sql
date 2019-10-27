@@ -33,7 +33,7 @@ ORDER BY a.nome;
 
 
   --Relatorio dos produtos comprados pelos clientes
-CREATE VIEW relatorio_view AS
+CREATE MATERIALIZED VIEW relatorio_view AS
 SELECT cv.nomeCliente, cv.data, cv.preco, cv.nomeFuncionario, mv.nomeMidia,
 mv.nomeGenero, mv.nomeTipo, pc.precoUnidade, pc.quantidade
 FROM ProdutosComprados pc
@@ -42,7 +42,7 @@ LEFT OUTER JOIN midia_otimizada_view mv ON pc.fkMidiaId = mv.midiaId
 ORDER BY cv.nomeCliente;
 
   --Relatorio de autores que tiveram suas midias vendidas e por quais funcionarios
-CREATE VIEW relatorio2_view AS
+CREATE MATERIALIZED VIEW relatorio2_view AS
 SELECT amv.nome nomeAutor, amv.nomeMidia, amv.nomeTipo, amv.nomeGenero, 
 vfv.nome nomeFuncionario, vfv.data, vfv.quantidade
 FROM autor_midia_view amv

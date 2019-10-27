@@ -48,5 +48,3 @@ vfv.nome nomeFuncionario, vfv.data, vfv.quantidade
 FROM autor_midia_view amv
 INNER JOIN venda_funcionario_view vfv ON amv.midiaId = vfv.fkMidiaId
 ORDER BY nomeAutor;
-
-
