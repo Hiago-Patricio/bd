@@ -1,5 +1,5 @@
-CREATE TABLESPACE tbs_livraria LOCATION '/home/gustavo/tablespace_livraria';
-CREATE TABLESPACE tbs_indice LOCATION '/home/gustavo/tablespace_livraria';
+CREATE TABLESPACE tbs_livraria LOCATION '/home/gustavo/tablespace_livraria/livraria';
+CREATE TABLESPACE tbs_indice LOCATION '/home/gustavo/tablespace_livraria/indice';
 ALTER DATABASE postgres SET TABLESPACE tbs_livraria;
 ALTER INDEX idx_cliente SET TABLESPACE tbs_indice;
 ALTER INDEX idx_compra_cliente SET TABLESPACE tbs_indice;
