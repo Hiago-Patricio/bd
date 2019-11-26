@@ -1,0 +1,13 @@
+Funcionario, aumento de 2 por ano 
+ProdutosComprados, 350 por dia
+Compra, 150 por mes
+Cliente, 100 por mes
+AutorMidia, 80 por mes 
+Autor, 3 por mes
+Revista, 180 por ano 
+Volume, 90 por ano 
+Manga, 20 por ano
+Livro, 30 por ano
+Midia, 300 por ano
+TipoMidia, 0 por ano
+Genero, 0 por ano
