@@ -1,6 +1,6 @@
 Funcionario, aumento de 2 por ano 
 ProdutosComprados, 350 por dia
-Compra, 150 por mes
+Compra, 150 por dia
 Cliente, 100 por mes
 AutorMidia, 80 por mes 
 Autor, 3 por mes
