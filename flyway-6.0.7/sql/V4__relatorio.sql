@@ -1,5 +1,5 @@
 
----Relatorio dos produtos comprados pelos clientes arrumado
+---Relatorio dos produtos comprados pelos clientes
 
 CREATE VIEW relatorio_view AS
 SELECT c.nome as nomeCliente, co.data, co.preco, f.nome as nomeFuncionario, m.nome as nomeMidia,
@@ -11,12 +11,13 @@ LEFT OUTER JOIN ProdutosComprados pc ON co.compraId = pc.fkCompraId
 LEFT OUTER JOIN Midia m ON pc.fkMidiaId = m.midiaId
 LEFT OUTER JOIN TipoMidia tm ON m.fkTipoMidiaId = tm.tipoMidiaId
 LEFT OUTER JOIN Genero g ON m.fkGeneroId = g.generoId
+WHERE c.vip = TRUE
 ORDER BY nomeCLiente;
 
 
 
 
----Relatorio de autores que tiveram suas midias vendidas e por quais funcionarios arrumado
+---Relatorio de autores que tiveram suas midias vendidas e por quais funcionarios
 
 CREATE VIEW relatorio2_view AS
 SELECT a.nome as nomeAutor, m.nome as nomeMidia, tm.nome as nomeTipo, g.nome as nomeGenero,
@@ -29,4 +30,5 @@ LEFT OUTER JOIN TipoMidia tm ON m.fkTipoMidiaId = tm.tipoMidiaId
 LEFT OUTER JOIN ProdutosComprados pc ON m.midiaId = pc.fkMidiaId
 LEFT OUTER JOIN Compra co ON pc.fkCompraId = co.compraId
 LEFT OUTER JOIN Funcionario f ON co.fkFuncionarioId = f.funcionarioId
+WHERE pc.quantidade > 25
 ORDER BY nomeAutor;

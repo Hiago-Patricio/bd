@@ -396,19 +396,73 @@ conn = engine.connect()
 
 quantidadeInsercoesCadaTabela = 5000
 fake = Faker()
-for i in range(quantidadeInsercoesCadaTabela):
+# for i in range(quantidadeInsercoesCadaTabela):
+#     insereGenero()
+#     insereTipoMidia()
+#     insereMidia()
+#     insereLivro()
+#     insereManga()
+#     insereVolume()
+#     insereRevista()
+#     insereAutor()
+#     insereAutorMidia()
+#     insereFuncionario()
+#     insereCliente()
+#     insereCompra()
+#     insereProdutosComprados()
+#     if i % 100 == 0:
+#         print(i)
+
+quantidadeGenero = 20
+quantidadeTipoMidia = 3
+quantidadeLivro = 50
+quantidadeManga = 16
+quantidadeVolume = 40
+quantidadeRevista = 40
+quantidadeMidia = quantidadeLivro + quantidadeVolume + quantidadeRevista
+quantidadeAutor = 72
+quantidadeAutorMidia = quantidadeMidia
+quantidadeFuncionario = 13
+quantidadeCliente = 1200
+quantidadeCompra = 54000
+quantidadeProdutosComprados = 126000
+
+for i in range(20):
     insereGenero()
+    print(i)
+for i in range(3):
     insereTipoMidia()
+    print(i)
+for i in range(130):
     insereMidia()
+    print(i)
+for i in range(50):
     insereLivro()
+    print(i)
+for i in range(16):
     insereManga()
+    print(i)
+for i in range(40):
     insereVolume()
+    print(i)
+for i in range(40):
     insereRevista()
+    print(i)
+for i in range(72):
     insereAutor()
+    print(i)
+for i in range(130):
     insereAutorMidia()
+    print(i)
+for i in range(13):
     insereFuncionario()
+    print(i)
+for i in range(1200):
     insereCliente()
+    print(i)
+for i in range(54000):
     insereCompra()
+    print(i)
+for i in range(126000):
     insereProdutosComprados()
-    if i % 100 == 0:
-        print(i)
+    print(i)
