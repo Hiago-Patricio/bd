@@ -144,7 +144,7 @@ tableCompra = Table('compra', metadata,
 insertCompra = tableCompra.insert()
 
 tableProdutosComprados = Table('produtoscomprados', metadata,
-    Column('produtoscompradosid', Integer, Sequence('produtoscompradosid'), primary_key=True, nullable=False),
+    # Column('produtoscompradosid', Integer, Sequence('produtoscompradosid'), primary_key=True, nullable=False),
     Column('fkcompraid', None, ForeignKey('compra.compraid'), nullable=False),
     Column('fkmidiaid', None, ForeignKey('midia.midiaid'), nullable=False),
     Column('quantidade', Integer, nullable=False),
@@ -163,9 +163,6 @@ def insereGenero():
         localizacao = fake.name()
         values = (generoId, nome, localizacao, )
         conn.execute(insertGenero.values(values))
-        query = str(insertGenero.compile(dialect=postgresql.dialect()))
-        query = query % {'generoid': generoId, 'nome': nome, 'localizacao': localizacao}
-        # write_in_file(query)
         return True
     except:
         return False
@@ -178,9 +175,6 @@ def insereTipoMidia():
         nome = fake.name()
         values = (tipoMidiaId, nome, )
         conn.execute(insertTipoMidia.values(values))
-        query = str(insertTipoMidia.compile(dialect=postgresql.dialect()))
-        query = query % {'tipomidiaid':tipoMidiaId, 'nome':nome, }
-        # write_in_file(query)
         return True
     except:
         return False
@@ -202,11 +196,6 @@ def insereMidia():
         precoMidia = round(random.uniform(20, 100), 2)
         values = (midiaId, fkGeneroId, fkTipoMidiaId, dataPublicacao, editora, nome, idioma, localPublicacao, precoMidia, )
         conn.execute(insertMidia.values(values))
-        query = str(insertMidia.compile(dialect=postgresql.dialect()))
-        query = query % {'midiaid':midiaId, 'fkgeneroid':fkGeneroId, 'fktipomidiaid':fkTipoMidiaId,
-                         'datapublicacao':dataPublicacao, 'editora':editora, 'nome':nome, 'idioma':idioma,
-                         'localpublicacao':localPublicacao, 'precomidia':precoMidia, }
-        # write_in_file(query)
         return True
     except:
         return False
@@ -224,10 +213,6 @@ def insereLivro():
         paginas = random.randrange(1, 500)
         values = (livroId, fkMidiaId, sinopse, edicao, paginas, )
         conn.execute(insertLivro.values(values))
-        query = str(insertLivro.compile(dialect=postgresql.dialect()))
-        query = query % {'livroid': livroId, 'fkmidiaid': fkMidiaId, 'sinopse': sinopse, 'edicao': edicao,
-                         'paginas': paginas, }
-        # write_in_file(query)
         return True
     except:
         return False
@@ -242,9 +227,6 @@ def insereManga():
         finalizado = bool(random.randrange(0, 2))
         values = (mangaId, nome, adaptacaoAnime, finalizado, )
         conn.execute(insertManga.values(values))
-        query = str(insertManga.compile(dialect=postgresql.dialect()))
-        query = query % {'mangaid': mangaId, 'nome': nome, 'adaptacaoanime': adaptacaoAnime, 'finalizado': finalizado, }
-        # write_in_file(query)
         return True
     except:
         return False
@@ -264,10 +246,6 @@ def insereVolume():
         quantidadeCapitulos = random.randrange(1, 100)
         values = (volumeId, fkMidiaId, fkMangaId, sinopse, numero, quantidadeCapitulos, )
         conn.execute(insertVolume.values(values))
-        query = str(insertVolume.compile(dialect=postgresql.dialect()))
-        query = query % {'volumeid': volumeId, 'fkmidiaid': fkMidiaId, 'fkmangaid': fkMangaId, 'sinopse': sinopse,
-                         'numero': numero, 'quantidadecapitulos': quantidadeCapitulos, }
-        # write_in_file(query)
         return True
     except:
         return False
@@ -284,9 +262,6 @@ def insereRevista():
         edicao = random.randrange(0, 100)
         values = (revistaId, fkMidiaId, empresa, edicao, )
         conn.execute(insertRevista.values(values))
-        query = str(insertRevista.compile(dialect=postgresql.dialect()))
-        query = query % {'revistaid': revistaId, 'fkmidiaid': fkMidiaId, 'empresa': empresa, 'edicao': edicao, }
-        # write_in_file(query)
         return True
     except:
         return False
@@ -302,10 +277,6 @@ def insereAutor():
         dataFalecimento = random_date()
         values = (autorId, nacionalidade, nome, dataNascimento, dataFalecimento, )
         conn.execute(insertAutor.values(values))
-        query = str(insertAutor.compile(dialect=postgresql.dialect()))
-        query = query % {'autorid': autorId, 'nacionalidade': nacionalidade, 'nome': nome,
-                         'datanascimento': dataNascimento, 'datafalecimento': dataFalecimento, }
-        # write_in_file(query)
         return True
     except:
         return False
@@ -320,9 +291,6 @@ def insereAutorMidia():
         fkMidiaId = lastIdMidia
         values = (fkAutorId, fkMidiaId, )
         conn.execute(insertAutorMidia.values(values))
-        query = str(insertAutorMidia.compile(dialect=postgresql.dialect()))
-        query = query % {'fkautorid': fkAutorId, 'fkmidiaid': fkMidiaId, }
-        # write_in_file(query)
         return True
     except:
         return False
@@ -338,10 +306,6 @@ def insereFuncionario():
         dataAdmissao = random_date()
         values = (funcionarioId, funcao, nome, salario, dataAdmissao, )
         conn.execute(insertFuncionario.values(values))
-        query = str(insertFuncionario.compile(dialect=postgresql.dialect()))
-        query = query % {'funcionarioid': funcionarioId, 'funcao': funcao, 'nome': nome, 'salario': salario,
-                         'dataadmissao': dataAdmissao, }
-        # write_in_file(query)
         return True
     except:
         return False
@@ -358,10 +322,6 @@ def insereCliente():
         dataNascimento = random_date()
         values = (clienteId, quantidadeCompras, endereco, sexo, nome, dataNascimento, )
         conn.execute(insertCliente.values(values))
-        query = str(insertCliente.compile(dialect=postgresql.dialect()))
-        query = query % {'clienteid': clienteId, 'quantidadecompras': quantidadeCompras, 'endereco': endereco,
-                         'sexo': sexo, 'nome': nome, 'datanascimento': dataNascimento, }
-        # write_in_file(query)
         return True
     except:
         return False
@@ -378,10 +338,6 @@ def insereCompra():
         data = random_date()
         values = (compraId, fkClienteId, fkFuncionarioId, data, )
         conn.execute(insertCompra.values(values))
-        query = str(insertCompra.compile(dialect=postgresql.dialect()))
-        query = query % {'compraid': compraId, 'fkclienteid': fkClienteId, 'fkfuncionarioid': fkFuncionarioId,
-                         'data': data, }
-        # write_in_file(query)
         return True
     except:
         return False
@@ -389,21 +345,11 @@ def insereCompra():
 
 def insereProdutosComprados():
     try:
-        stmt = "SELECT nextval('produtosComprados_produtosCompradosId_seq')"
-        produtosCompradosId = conn.execute(stmt).fetchone()[0]
-        stmt = select([tableCompra]).order_by(func.random())
-        fkCompraId = conn.execute(stmt).fetchone()['compraid']
-        stmt = select([tableMidia]).order_by(func.random())
-        # fkMidiaId = conn.execute(stmt).fetchone()['midiaid']
-        stmt = "SELECT COUNT(*) FROM produtoscomprados WHERE fkcompraid = " + str(fkCompraId)
-        fkMidiaId = conn.execute(stmt).fetchone()['count'] + 1
+        fkCompraId = random.randrange(1, 54002)
+        fkMidiaId = random.randrange(1, 131)
         quantidade = random.randrange(1, 130)
-        values = (produtosCompradosId, fkCompraId, fkMidiaId, quantidade, )
-        conn.execute(insertProdutosComprados.values(values))
-        query = str(insertProdutosComprados.compile(dialect=postgresql.dialect()))
-        query = query % {'produtoscompradosid': produtosCompradosId, 'fkcompraid': fkCompraId, 'fkmidiaid': fkMidiaId,
-                         'quantidade': quantidade, }
-        # write_in_file(query)
+        values = (fkCompraId, fkMidiaId, quantidade, )
+        conn.execute(insertProdutosComprados.values(fkcompraid=fkCompraId, fkmidiaid=fkMidiaId, quantidade=quantidade, ))
         return True
     except:
         return False
@@ -431,7 +377,7 @@ conn = engine.connect()
 #     quantidade += insereMidia()
 # print('Quantidade: ', quantidade)
 
-# lastIdMidia = 0
+# lastIdMidia = 0Client
 # print('Livro')
 # quantidade = 0
 # for i in range(50):
@@ -459,8 +405,7 @@ conn = engine.connect()
 # for i in range(40):
 #     lastIdMidia += 1
 #     quantidade += insereRevista()
-# print('Quantidade: ', quantidade)
-
+# print('Quantidade: ', quantidade)Client
 # print('Autor')
 # quantidade = 0
 # for i in range(72):
