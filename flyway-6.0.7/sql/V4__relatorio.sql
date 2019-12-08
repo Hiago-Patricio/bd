@@ -12,6 +12,8 @@ LEFT OUTER JOIN Midia m ON pc.fkMidiaId = m.midiaId
 LEFT OUTER JOIN TipoMidia tm ON m.fkTipoMidiaId = tm.tipoMidiaId
 LEFT OUTER JOIN Genero g ON m.fkGeneroId = g.generoId
 WHERE c.vip = TRUE
+AND co.data > '2000-1-1'
+AND co.preco > 100
 ORDER BY nomeCLiente;
 
 
@@ -31,4 +33,5 @@ LEFT OUTER JOIN ProdutosComprados pc ON m.midiaId = pc.fkMidiaId
 LEFT OUTER JOIN Compra co ON pc.fkCompraId = co.compraId
 LEFT OUTER JOIN Funcionario f ON co.fkFuncionarioId = f.funcionarioId
 WHERE pc.quantidade > 25
+AND co.data > '2000-1-1'
 ORDER BY nomeAutor;
