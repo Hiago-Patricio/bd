@@ -51,6 +51,7 @@ tableMidia = Table('midia', metadata,
     Column('idioma', String(255), nullable=False),
     Column('localpublicacao', String(255), nullable=False),
     Column('precomidia', Float, nullable=False),
+    Column('quantidade', Integer, nullable=False),
 )
 insertMidia = tableMidia.insert()
 
@@ -185,7 +186,8 @@ def insereMidia(quantidadeLinhasGenero = 0, quantidadeLinhasTipoMidia = 0,
         idioma = fake.name()
         localPublicacao = fake.name()
         precoMidia = round(random.uniform(20, 100), 2)
-        values = (fkGeneroId, fkTipoMidiaId, dataPublicacao, editora, nome, idioma, localPublicacao, precoMidia, )
+        quantidade = random.randrange(0, 100)
+        values = (fkGeneroId, fkTipoMidiaId, dataPublicacao, editora, nome, idioma, localPublicacao, precoMidia, quantidade)
         conn.execute(insertMidia.values(values))
         return True
     except:

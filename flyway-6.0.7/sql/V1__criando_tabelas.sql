@@ -33,7 +33,8 @@ CREATE TABLE Midia (
     nome VARCHAR(255) NOT NULL,
     idioma VARCHAR(255) NOT NULL,
     localPublicacao VARCHAR(255) NOT NULL,
-    precoMidia FLOAT NOT NULL CHECK(precoMidia >= 0)
+    precoMidia FLOAT NOT NULL CHECK(precoMidia >= 0),
+    quantidade INTEGER NOT NULL CHECK(quantidade >= 0)
 );
 
 
