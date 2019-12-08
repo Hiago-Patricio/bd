@@ -21,7 +21,7 @@ BEFORE INSERT ON ProdutosComprados
 FOR EACH ROW
 EXECUTE PROCEDURE valor_atual_produto_comprado_FUNC();
 
--- Cliente recebe 10% de desconto no valor inicial da compra a partir de 5 unidades
+-- Cliente recebe 10% de desconto no valor inicial do produto na compra a partir de 5 unidades
 -- Segundo
 CREATE OR REPLACE FUNCTION desconto_de_10_porcento_a_partir_de_5_unidades_FUNC()
 RETURNS TRIGGER AS $BODY$
