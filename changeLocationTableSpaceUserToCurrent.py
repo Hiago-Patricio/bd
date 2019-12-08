@@ -16,7 +16,8 @@ def writeFile(path, content):
 
 
 def changeUser(content):
-    return content.replace('~', '/home/' + getpass.getuser())
+    user = content.split('/', 3)[2]
+    return content.replace(user, getpass.getuser())
 
 
 filesToChange = [

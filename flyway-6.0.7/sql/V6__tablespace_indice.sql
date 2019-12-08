@@ -1,1 +1,1 @@
-CREATE TABLESPACE tbs_indice LOCATION '/home/gustavo/tablespace_livraria/indice';
+CREATE TABLESPACE tbs_indice LOCATION '/home/hiago/tablespace_livraria/indice';
