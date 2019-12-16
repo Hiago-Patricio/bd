@@ -83,7 +83,8 @@ CREATE TABLE Autor (
 CREATE TABLE AutorMidia (
     fkAutorId INTEGER REFERENCES Autor(autorId),
     fkMidiaId INTEGER REFERENCES Midia(midiaId),
-    UNIQUE(fkAutorId, fkMidiaId)
+    UNIQUE(fkAutorId, fkMidiaId),
+    PRIMARY KEY(fkAutorID, fkMidiaId)
 );
 
 CREATE TABLE Funcionario (

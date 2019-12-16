@@ -217,3 +217,42 @@ CREATE TRIGGER h_cliente_vira_vip_depois_de_100_compras_TG
 AFTER INSERT ON Compra
 FOR EACH ROW 
 EXECUTE PROCEDURE cliente_vira_vip_depois_de_100_compras_FUNC();
+
+-- Uma mídia só pode ser referenciada por uma revista, livro ou volume
+CREATE OR REPLACE FUNCTION limita_uso_da_chave_da_midia_FUNC()
+RETURNS TRIGGER AS $BODY$
+DECLARE
+    quantidadeUsadaFkMidiaId INTEGER;
+BEGIN
+    quantidadeUsadaFkMidiaId = 0;
+
+    SELECT COUNT(*)
+    INTO quantidadeUsadaFkMidiaId
+    FROM livro l
+    FULL JOIN revista r
+    ON l.fkmidiaid = r.fkmidiaid
+    FULL JOIN volume v
+    ON v.fkmidiaid = r.fkmidiaid
+    WHERE l.fkmidiaid = NEW.fkmidiaid;
+
+    IF(quantidadeUsadaFkMidiaId != 0) THEN
+        RAISE EXCEPTION 'Chave já usada em outro produto';
+    END IF;
+    RETURN NEW;
+END;
+$BODY$ LANGUAGE plpgsql;
+
+CREATE TRIGGER limita_uso_da_chave_da_midia_livro_TG
+BEFORE INSERT ON livro
+FOR EACH ROW
+EXECUTE PROCEDURE limita_uso_da_chave_da_midia_FUNC();
+
+CREATE TRIGGER limita_uso_da_chave_da_midia_revista_TG
+BEFORE INSERT ON revista
+FOR EACH ROW
+EXECUTE PROCEDURE limita_uso_da_chave_da_midia_FUNC();
+
+CREATE TRIGGER limita_uso_da_chave_da_midia_volume_TG
+BEFORE INSERT ON volume
+FOR EACH ROW
+EXECUTE PROCEDURE limita_uso_da_chave_da_midia_FUNC();
