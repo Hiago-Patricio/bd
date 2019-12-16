@@ -21,8 +21,8 @@ def changeUser(content):
 
 
 filesToChange = [
-    'flyway-6.0.7/sql/V5__tablespace_livraria.sql',
-    'flyway-6.0.7/sql/V6__tablespace_indice.sql',
+    'flyway-6.0.7/sql/V6__tablespace_livraria.sql',
+    'flyway-6.0.7/sql/V7__tablespace_indice.sql',
 ]
 
 for file in filesToChange:
