@@ -1,0 +1,17 @@
+Documentação de otimizações:
+
+1 Índice no campo "data" da tabela "compra", pois todos os relatórios necessitam
+que esse campo seja verificado.
+
+2 Índice no campo "vip" da tabela "cliente", pois alguns relatórios necessitam 
+precisam que esse campo seja verificado e também há triggers que se utilizam
+desse campo.
+
+3 Índice no campo "nome" da tabela "midia", pois nas pesquisas por livros os nomes 
+precisam ser ordenados de forma rápida para o cliente, isso será feito muitas vezes, 
+principalmente quando o cliente estiver escolhendo o livro para compra.
+
+4 Tablespace para os índices em discos mais performáticos para agilizar a pesquisa.
+
+5 Tablespace para a tabela "mídia" em um disco que tenha mais foco em leitura do que
+escrita.
