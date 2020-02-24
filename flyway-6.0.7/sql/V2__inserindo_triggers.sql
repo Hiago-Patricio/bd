@@ -219,6 +219,7 @@ FOR EACH ROW
 EXECUTE PROCEDURE cliente_vira_vip_depois_de_100_compras_FUNC();
 
 -- Uma mídia só pode ser referenciada por uma revista, livro ou volume
+--nono
 CREATE OR REPLACE FUNCTION limita_uso_da_chave_da_midia_FUNC()
 RETURNS TRIGGER AS $BODY$
 DECLARE
