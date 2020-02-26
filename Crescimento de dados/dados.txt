@@ -1,13 +1,48 @@
-Funcionario, aumento de 2 por ano 
-ProdutosComprados, 350 por dia
-Compra, 150 por dia
-Cliente, 100 por mes
-AutorMidia, 80 por mes 
-Autor, 3 por mes
-Revista, 180 por ano 
-Volume, 90 por ano 
-Manga, 20 por ano
-Livro, 30 por ano
-Midia, 300 por ano
-TipoMidia, 0 por ano
-Genero, 0 por ano
+
+	
+
+
+
+
+
+
+
+
+
+
+
+	Funcionarios = int(Funcionarios + ((2 + ano) ** (1 + (ano/100 * 5)))) --- VALOR BASE 2+ por ano
+
+
+	Manga= int(Manga + ((12 + ano) ** (1 + (ano/100 * 5)))) --- VALOR BASE 12+ por ano
+
+
+	Volume = int(volume + ((20 + ano) ** 1 + (ano/100 * 5)))) --- VALOR BASE 20+ por ano
+
+
+	Autor = int(Autor + ((20 + ano) ** (1 + (ano/100 * 5))))  --- VALOR BASE 20+ por ano
+
+
+	Livro = int(Livro + ((20 + ano) ** (1 + (ano/100 * 5))))  --- VALOR BASE 20+ por ano
+
+
+	Revista= int(Revista + ((24 + ano) ** (1 + (ano/100 * 5)))) --- VALOR BASE 20+ por ano
+
+
+	Clientes = int(Clientes + ((720 + ano) ** (1 + (ano/100 * 5)))) --- VALOR BASE 720+ por ano
+
+
+	comprasRealizadas = int(comprasRealizadas + ((36000 + ano) ** (1 + (ano/100 * 2)))) --- VALOR BASE 36000+ por ano
+
+
+	produtosVendidos= int(produtosVendidos + ((72000 + ano) ** (1 + (ano/100 * 2)))) --- VALOR BASE 72000+ por ano
+
+
+
+
+
+
+
+
+
+
