@@ -48,7 +48,8 @@ df = df.select('Id', 'Quantidade de compras', 'Endereço', 'Sexo', 'Nome', getAg
 
 df.show()
 
-df = df.write \
+# Salva no banco
+df.write \
     .format("jdbc") \
     .option("url", "jdbc:postgresql:test") \
     .option("dbtable", "resumo") \
@@ -56,3 +57,6 @@ df = df.write \
     .option("password", "123") \
     .option("driver", "org.postgresql.Driver") \
     .save()
+
+# Salva em json
+df.coalesce(1).write.format('json').save('format_json')
